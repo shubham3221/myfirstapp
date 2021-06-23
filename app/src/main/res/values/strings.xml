@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">myfirstapp</string>
+    <string name="under_sign_up">Lorem ipsum dolor sit amet, consectetur adipig elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
+    <string name="user_name"> Name</string>
+    <string name="terms"><![CDATA[I agree to the Terms & Conditions]]></string>
+    <string name="term2">Sign Up to our Mailing Lists</string>
+
+    <string name="facebook_app_id">588691875446346</string>
+    <string name="fb_login_protocol_scheme">fb588691875446346</string>
+    <string name="PIN_ID">1470342</string>
+</resources>
