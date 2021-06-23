@@ -62,6 +62,8 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'
     implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.0'
+//    implementation 'org.twitter4j:twitter4j-core:4.0.7'
+
 
     implementation 'com.android.support:multidex:1.0.3'
 
@@ -72,4 +74,10 @@ dependencies {
     //pin
     implementation 'com.github.forkerknights:android-pdk:1.2b'
     implementation 'com.mcxiaoke.volley:library:1.0.19'
+
+    //twitter
+//    implementation 'com.twitter.sdk.android:twitter:3.1.1'
+//    implementation 'com.twitter.sdk.android:twitter-core:3.1.1'
+    implementation 'org.twitter4j:twitter4j-core:4.0.7'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.4.1'
 }
