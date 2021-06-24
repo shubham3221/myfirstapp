@@ -6,12 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".twitterLogin.TwitterActivity">
 
+    <TextView
+        android:textSize="20dp"
+        android:textStyle="bold"
+        android:id="@+id/twitter_text"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
     <Button
+        android:backgroundTint="#2196F3"
         android:id="@+id/twitter_login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:background="@drawable/round_corner"
         android:drawablePadding="8dp"
         android:padding="8dp"
         android:text="Log in with Twitter"
@@ -21,5 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

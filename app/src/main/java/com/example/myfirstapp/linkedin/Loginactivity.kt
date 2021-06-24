@@ -64,6 +64,12 @@ class Loginactivity : AppCompatActivity() {
 
             })
         }
+        demo("www.google.com"){result: Boolean ->
 
+        }
+
+    }
+    fun demo(url:String , callback: (result:Boolean) -> Unit ){
+        callback(false)
     }
 }
