@@ -12,11 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
         <activity android:name=".twitterLogin.TwitterActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".pininterestSdk.PininterestActivity">
             <intent-filter>
@@ -33,9 +29,19 @@
         <activity android:name=".facebookLogin.FacebookActivity">
 
         </activity>
-        <activity android:name=".linkedin.Loginactivity" />
+        <activity android:name=".linkedin.Loginactivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT"/>
+                <category android:name="android.intent.category.BROWSABLE"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".SplashScreen" />
-        <activity android:name=".Demoactivity" />
+        <activity android:name=".Demoactivity" >
+
+        </activity>
         <activity android:name=".Lastscreen" />
         <activity android:name=".MainActivity" />
         <activity

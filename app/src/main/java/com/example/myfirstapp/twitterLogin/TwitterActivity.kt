@@ -158,11 +158,11 @@ class TwitterActivity : AppCompatActivity(),Myinterface{
     }
 
     override fun onClick() {
-
+        Log.e(TAG, "onClick: " )
     }
 
     override fun onClickParams(name: String) {
-
+        Log.e(TAG, "onClickParams: $name")
     }
 
 
