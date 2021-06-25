@@ -6,6 +6,8 @@ import android.app.Dialog
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
@@ -13,6 +15,7 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myfirstapp.Modelclass
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import kotlinx.android.synthetic.main.activity_twitter.*
@@ -25,7 +28,6 @@ import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
 import twitter4j.conf.ConfigurationBuilder
 
-
 interface Myinterface {
     fun onClick()
     fun onClickParams(name: String)
@@ -37,7 +39,6 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
          Dialog(this)
      }
     var accToken: AccessToken? = null
-    var demo = ArrayList<String>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twitter)
@@ -45,6 +46,17 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
             getToken()
         }
 
+    }
+    fun getPost(url:String,callback: (Boolean,Int) -> Unit){
+        callback(true,1)
+
+        Thread{
+            Thread.sleep(2000)
+            callback(false,2)
+        }.start()
+    }
+    fun demo2(callback: (Boolean,Int) -> Unit){
+        callback(true,0)
     }
 
 
@@ -64,7 +76,6 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
                 withContext(Dispatchers.Main) {
                     setupTwitterWebviewDialog(requestToken.authorizationURL)
                 }
-                twitter.invalidateOAuth2Token()
             } catch (e: Exception) {
                 Log.e("// ", e.toString())
             }
@@ -89,33 +100,9 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
         webView.settings.javaScriptEnabled = true
         webView.loadUrl(url)
         twitterDialog.setContentView(webView)
-        twitterDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-            ViewGroup.LayoutParams.MATCH_PARENT)
+        twitterDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT)
         twitterDialog.show()
     }
-
-//    @JvmName("setupTwitterWebviewDialog1")
-//    @SuppressLint("SetJavaScriptEnabled")
-//    fun setupTwitterWebviewDialog(url: String) {
-//        val web = WebView(this)
-//        web.settings.javaScriptEnabled = true
-//        web.webViewClient = object :WebViewClient(){
-//
-//        }
-//        web.settings.loadsImagesAutomatically = true
-//        web.settings.javaScriptEnabled = true
-//        web.settings.builtInZoomControls = true
-//        web.settings.setSupportZoom(true)
-//        web.settings.loadWithOverviewMode = true
-//        web.settings.useWideViewPort = true
-//        web.settings.allowContentAccess = true
-//        web.loadUrl(url)
-//        twitterDialog.setContentView(web)
-//
-//        twitterDialog.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT,
-//            ViewGroup.LayoutParams.MATCH_PARENT)
-//        twitterDialog.show()
-//    }
 
     inner class TwitterWebViewClient : WebViewClient() {
 
@@ -125,6 +112,7 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
             view: WebView?,
             request: WebResourceRequest?,
         ): Boolean {
+            Log.e(TAG, "shouldOverrideUrlLoading: "+request?.url.toString() )
             if (request?.url.toString().startsWith(TwitterConstants.CALLBACK_URL)) {
                 handleUrl(request?.url.toString())
 
@@ -205,6 +193,4 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
     override fun onClickParams(name: String) {
         Log.e(TAG, "onClickParams: $name")
     }
-
-
 }
