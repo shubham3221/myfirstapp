@@ -15,14 +15,12 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.myfirstapp.Modelclass
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import kotlinx.android.synthetic.main.activity_twitter.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import kotlinx.coroutines.*
 import twitter4j.Twitter
 import twitter4j.TwitterFactory
 import twitter4j.auth.AccessToken
@@ -42,14 +40,14 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twitter)
+        val hasExtra = intent.hasExtra("myresult")
+        Log.e(TAG, "onCreate: $hasExtra")
         twitter_login_btn.setOnClickListener {
             getToken()
         }
-
     }
     fun getPost(url:String,callback: (Boolean,Int) -> Unit){
         callback(true,1)
-
         Thread{
             Thread.sleep(2000)
             callback(false,2)

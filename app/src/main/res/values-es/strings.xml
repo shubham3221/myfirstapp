@@ -1,19 +1,9 @@
-<resources>
-    <string name="app_name">myfirstapp</string>
-    <string name="under_sign_up">Lorem ipsum dolor sit amet, consectetur adipig elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam</string>
-    <string name="user_name"> Name</string>
-    <string name="terms"><![CDATA[I agree to the Terms & Conditions]]></string>
-    <string name="term2">Sign Up to our Mailing Lists</string>
-    <string name="first_name">first name</string>
-
-    <string name="facebook_app_id">588691875446346</string>
-    <string name="fb_login_protocol_scheme">fb588691875446346</string>
-    <string name="PIN_ID">1470342</string>
-    <string name="goto_next_activity">goto next activity</string>
-    <string name="request_permission">request permission</string>
-    <!--    <string name="GOOGLE_CLIENT_ID">97881678490-dpf0oeccsrpujs8ttr7lcapsijd4njno.apps.googleusercontent.com</string>-->
-<!--    <string name="GOOGLE_CLIENT_SECRET">rGD7Vl7q5dnHzQWogYfXbQLE</string>-->
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="MissingTranslation">אוכף</string>
     <string name="signup_with_social">הרשמה באמצעות כניסה חברתית</string>
+    <string name="first_name">שם פרטי</string>
+    <string name="goto_next_activity">שם</string>
     <string name="first_name_hint">שם פרטי</string>
     <string name="middle_name">שם אמצעי</string>
     <string name="middle_name_hint">שם אמצעי</string>
@@ -266,10 +256,10 @@
     <string name="try_again">נסה שוב</string>
     <string name="app_is_under_maintenance">האפליקציה נמצאת תחת תחזוקה</string>
     <string name="okay1">בסדר</string>
+    <string name="request_permission">לדוגמא זו דרושה אישור מצלמה.</string>
     <string name="camera_error">מכשיר זה אינו תומך ב- ממשק API של מַצלֵמָה2.</string>
 
     <string name="password_should_lie">אורך הסיסמה צריך להיות בין 6 ל 8 ספרות.</string>
     <string name="please_focus_the_vehicle_number_withing_the_scanner_area_to_get_accurate_results_once_all_the_number_plates_are_scanned_then_click_the_finish_scanning_button">אנא מיקד את מספר הרכב באזור הסורק כדי לקבל תוצאות מדויקות. לאחר סריקת כל לוחיות המספר לחץ על כפתור "סיום סריקה".</string>
     <string name="time_alert">" Yיש לך 10 שניות לבטל את ההקלטה הזו. אם לא אז הסרטון יעלה אוטומטית לאחר 10 שניות."</string>
-
 </resources>

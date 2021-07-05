@@ -82,4 +82,7 @@ dependencies {
 
     //linkedin
     implementation "com.github.koushikcse:LinkedIn:+"
+
+    //GOOGLE
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 }
