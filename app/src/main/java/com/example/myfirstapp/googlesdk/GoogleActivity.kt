@@ -7,7 +7,7 @@ import android.provider.MediaStore
 import android.util.Log
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.example.myfirstapp.LocaleUtils
+import com.example.myfirstapp.LocaleUtilsFirst
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import com.example.myfirstapp.twitterLogin.TwitterActivity
@@ -25,7 +25,7 @@ class GoogleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google)
 
-        val locale = LocaleUtils().setLocale(this, "es");
+        val locale = LocaleUtilsFirst().setLocale(this, "es");
         val resources = locale!!.getResources();
         req_permisson.setText(resources.getString(R.string.first_name));
 
@@ -77,6 +77,12 @@ class GoogleActivity : AppCompatActivity() {
                     Log.e("//", "Storage permnission denied")
                 }
             }
+
+
+        //demo
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+
+        }
 
         req_permisson.setOnClickListener {
             requestPermission.launch(android.Manifest.permission.WRITE_EXTERNAL_STORAGE)
