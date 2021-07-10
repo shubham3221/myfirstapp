@@ -137,6 +137,7 @@ class ImageActivity : AppCompatActivity() {
             val string = cursor.getString(column_index)
             string
         } finally {
+
             cursor?.close()
         }
     }
