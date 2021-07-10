@@ -138,6 +138,7 @@ class ImageActivity : AppCompatActivity() {
             string
         } finally {
             cursor?.close()
+
         }
     }
     private fun getRealPathFromURI2(contentUri: Uri): String? {
