@@ -87,6 +87,7 @@ class ImageActivity : AppCompatActivity() {
                 val realPathFromURI2 = getRealPathFromURI2(it)
                 imageView.setImageURI(it)
 
+
                 it?.let {
                     val file = File(realPathFromURI2)
 //                    val filePart = MultipartBody.Part.createFormData("image", file.name, file.asRequestBody())
