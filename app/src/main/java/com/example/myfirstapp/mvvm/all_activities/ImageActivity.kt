@@ -10,11 +10,18 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.loader.content.CursorLoader
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import com.example.myfirstapp.mvvm.viewmodel.Myviewmodel
 import com.example.myfirstapp.mvvm.viewmodel.Status
 import kotlinx.android.synthetic.main.activity_image.*
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
+import java.util.jar.Manifest
 
 
 class ImageActivity : AppCompatActivity() {
@@ -77,33 +84,41 @@ class ImageActivity : AppCompatActivity() {
         }
         val getContent =
             registerForActivityResult(ActivityResultContracts.GetContent()) {
-                text.text = it.toString()
+                val realPathFromURI2 = getRealPathFromURI2(it)
+                imageView.setImageURI(it)
 
-//                it?.let {
-//                    val file = File(it.path)
-//                    Log.e(TAG, "onCreate: " + file.absolutePath)
-//                    Log.e(TAG, "onCreate: " + file.absoluteFile)
-//                    val requestFile =
-//                        RequestBody.create("multipart/form-data".toMediaTypeOrNull(), file)
-//                    val frontSideImage =
-//                        MultipartBody.Part.createFormData("profile_image", file.name, requestFile)
-//                    viewModel.uploadImage(frontSideImage).observe(this, Observer { result ->
-//                        when (result.status) {
-//                            Status.SUCCESS -> {
-//                                text.text = result.data.toString()
-//                            }
-//                            Status.ERROR -> {
-//                                text.text = "Error: " + result.message
-//                            }
-//                            Status.LOADING -> {
-//                                text.text = "loading..."
-//                            }
-//                        }
-//                    })
-//                }
+                it?.let {
+                    val file = File(realPathFromURI2)
+//                    val filePart = MultipartBody.Part.createFormData("image", file.name, file.asRequestBody())
+                    val frontSideImage = MultipartBody.Part.createFormData("image", file.name
+                        , file.asRequestBody("multipart/form-data".toMediaTypeOrNull()))
+                    viewModel.uploadImage(frontSideImage).observe(this, Observer { result ->
+                        when (result.status) {
+                            Status.SUCCESS -> {
+                                text.text = result.data.toString()
+                            }
+                            Status.ERROR -> {
+                                text.text = "Error: " + result.message
+                            }
+                            Status.LOADING -> {
+                                text.text = "loading..."
+                            }
+                        }
+                    })
+                }
+            }
+        val requestPermission =
+            registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions: MutableMap<String, Boolean>? ->
+                var isGranted = true
+                permissions?.forEach{
+                    if (!it.value){
+                        isGranted = false
+                    }
+                }
+                if (isGranted) getContent.launch("image/*") else text.text = "Permission not granted"
             }
         launch_fragment.setOnClickListener {
-            getContent.launch("image/*")
+            requestPermission.launch(arrayOf(android.Manifest.permission.READ_EXTERNAL_STORAGE,android.Manifest.permission.WRITE_EXTERNAL_STORAGE))
 //            observer.getPermission()
 //            val commitAllowingStateLoss =
 //                supportFragmentManager.beginTransaction().add(R.id.container, BlankFragment())
@@ -118,10 +133,21 @@ class ImageActivity : AppCompatActivity() {
             cursor = getContentResolver().query(contentUri, proj, null, null, null)
             val column_index = cursor!!.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
             cursor.moveToFirst()
-            cursor.getString(column_index)
+            val string = cursor.getString(column_index)
+            string
         } finally {
             cursor?.close()
         }
+    }
+    private fun getRealPathFromURI2(contentUri: Uri): String? {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val loader = CursorLoader(this, contentUri, proj, null, null, null)
+        val cursor: Cursor = loader.loadInBackground()!!
+        val column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val result = cursor.getString(column_index)
+        cursor.close()
+        return result
     }
 
     private fun post() {

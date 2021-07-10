@@ -32,20 +32,27 @@ class RetrofitBuilder {
         @POST("/posts")
         suspend fun postRequest():JsonObject
 
+
         @Multipart
         @POST("3/image")
-        suspend fun uploadImage(@Part image: MultipartBody.Part?) : JsonObject
-//        suspend fun uploadImage(@Part image: MultipartBody.Part? , @Part("name") name: ResponseBody?)
-
+         suspend fun uploadImage(@Part() image: MultipartBody.Part?) : JsonObject
 
     }
 
-    object instance {
-        val builder =
-            Retrofit.Builder().baseUrl(BASE_URL).addConverterFactory(GsonConverterFactory.create(
+    object jsonPlaceHolder {
+        val builder = Retrofit.Builder().baseUrl(BASE_URL)
+            .addConverterFactory(GsonConverterFactory.create(
                 GsonBuilder().setLenient().create()))
-                .client(Myinterceptor.addIntercepterImgur())
-                .build()
+            .client(Myinterceptor.addIntercepterImgur())
+            .build()
+        val retrofit = builder.create(ApiService::class.java)
+    }
+    object uploadImage{
+        val builder = Retrofit.Builder().baseUrl(UPLOAD_URL)
+            .addConverterFactory(GsonConverterFactory.create(
+                GsonBuilder().setLenient().create()))
+            .client(Myinterceptor.addIntercepterImgur())
+            .build()
         val retrofit = builder.create(ApiService::class.java)
     }
 

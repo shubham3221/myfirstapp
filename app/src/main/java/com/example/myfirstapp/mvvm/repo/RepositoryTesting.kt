@@ -9,6 +9,7 @@ import com.example.myfirstapp.mvvm.model.Mymodel
 import com.example.myfirstapp.mvvm.model.Postmodel
 import com.example.myfirstapp.mvvm.viewmodel.MyResult
 import com.example.myfirstapp.mvvm.webtool.RetrofitBuilder
+import com.google.gson.JsonObject
 import kotlinx.coroutines.*
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -78,7 +79,7 @@ class RepositoryTesting {
 
     fun fetchSpecificPosts(num: Int, mdata: MutableLiveData<ArrayList<Postmodel>>) {
         status.value = true
-        RetrofitBuilder.instance.retrofit.getPosts()
+        RetrofitBuilder.jsonPlaceHolder.retrofit.getPosts()
             .enqueue(object : Callback<ArrayList<Postmodel>> {
 
                 override fun onResponse(
@@ -100,10 +101,10 @@ class RepositoryTesting {
     }
 
 
-    suspend fun getPosts() = RetrofitBuilder.instance.retrofit.getPostsWithSuspend()
-    suspend fun getSpecificPosts(num: Int) = RetrofitBuilder.instance.retrofit.getSpecific_WithSuspend(num)
-    suspend fun postRequest() = RetrofitBuilder.instance.retrofit.postRequest()
-    suspend fun uploadImage(image:MultipartBody.Part) = RetrofitBuilder.instance.retrofit.uploadImage(image)
+    suspend fun getPosts() = RetrofitBuilder.jsonPlaceHolder.retrofit.getPostsWithSuspend()
+    suspend fun getSpecificPosts(num: Int) = RetrofitBuilder.jsonPlaceHolder.retrofit.getSpecific_WithSuspend(num)
+    suspend fun postRequest() = RetrofitBuilder.jsonPlaceHolder.retrofit.postRequest()
+    suspend fun uploadImage(image:MultipartBody.Part) = RetrofitBuilder.uploadImage.retrofit.uploadImage(image)
 
 
     fun getPost(list: MutableLiveData<ArrayList<Postmodel>>) = liveData(Dispatchers.IO) {
@@ -135,7 +136,7 @@ class RepositoryTesting {
             emit(MyResult.error(null, e.message ?: "Error occured"))
         }
     }
-
+//
     fun uploadImgaeToServer(image: MultipartBody.Part) = liveData(Dispatchers.IO) {
         emit(MyResult.loading(null))
         try {

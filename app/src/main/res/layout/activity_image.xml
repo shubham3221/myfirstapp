@@ -45,13 +45,20 @@
     <!--    <ScrollView-->
     <!--        android:layout_width=""-->
     <!--        android:layout_height=""-->
-
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
     <TextView
+        android:layout_margin="10dp"
         android:id="@+id/text"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="Output:"
-        android:textSize="30dp"
+        android:textSize="25sp"
         android:textStyle="bold|italic"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"

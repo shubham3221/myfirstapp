@@ -13,6 +13,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application
+        android:requestLegacyExternalStorage="true"
         android:name=".myfirstapp"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -23,12 +24,11 @@
         <service
             android:name=".notifications.MyService_NEW"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
         <service
             android:name=".notifications.MyService_OLD"
             android:enabled="true"
             android:exported="true" />
-
         <meta-data
             android:name="firebase_messaging_auto_init_enabled"
             android:value="false" />
