@@ -14,7 +14,6 @@ import androidx.lifecycle.lifecycleScope
 import com.example.myfirstapp.Myconstants.Companion.KEY
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.databinding.ActivityMainBinding
-import com.example.myfirstapp.datastore.Mydataclass
 import kotlinx.android.synthetic.main.activity_splash_screen.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
@@ -30,15 +29,6 @@ class SplashScreen : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
         mSharedprefrences=getSharedPreferences(KEY, MODE_PRIVATE)
 
-        val mDataclass = Mydataclass(this)
-        lifecycleScope.async {
-            mDataclass.saveValue("abc")
-            mDataclass.dataStore.data
-        }
-
-        mDataclass.mValue.asLiveData().observe(this, Observer {
-            Log.e(TAG, "onCreate: ")
-        })
 
 
 //        mSharedprefrences.getString("a", null)?.also {

@@ -3,6 +3,7 @@ package com.example.myfirstapp.twitterLogin
 import android.annotation.SuppressLint
 import android.annotation.TargetApi
 import android.app.Dialog
+import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -41,6 +42,9 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_twitter)
         val hasExtra = intent.hasExtra("myresult")
+        if (hasExtra){
+            setResult(RESULT_OK,Intent().putExtra("activity",this.javaClass.name))
+        }
         Log.e(TAG, "onCreate: $hasExtra")
         twitter_login_btn.setOnClickListener {
             getToken()

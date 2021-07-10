@@ -30,7 +30,7 @@ class Imageadapter(var mList: ArrayList<Mymodel>):RecyclerView.Adapter<Imageadap
         return mList.size
     }
 
-    fun updateList(list: ArrayList<Mymodel>){
+    fun updateAdapter(list: ArrayList<Mymodel>){
         this.mList = list
         notifyDataSetChanged()
     }
