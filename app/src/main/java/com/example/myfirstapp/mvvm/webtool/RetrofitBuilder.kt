@@ -11,49 +11,56 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.*
 
-const val BASE_URL = "https://jsonplaceholder.typicode.com/"
-const val END_POINT = "posts"
-private const val UPLOAD_URL = "https://api.imgur.com/"
-private const val IMGUR_TOKEN = "d76a7153e983213940780cbcc6f36621ec29b2aa"
 
 
-class RetrofitBuilder {
 
-    interface ApiService {
-        @GET(END_POINT)
-        fun getPosts(): Call<ArrayList<Postmodel>>
+object RetrofitBuilder {
 
-        @GET(END_POINT)
-        suspend fun getPostsWithSuspend(): ArrayList<Postmodel>
+    const val BASE_URL = "https://jsonplaceholder.typicode.com/"
+    const val END_POINT = "posts"
+    private const val UPLOAD_URL = "https://api.imgur.com/"
+    private const val IMGUR_TOKEN = "d76a7153e983213940780cbcc6f36621ec29b2aa"
 
-        @GET(END_POINT)
-        suspend fun getSpecific_WithSuspend(@Query("id") id: Int): ArrayList<Postmodel>
-
-        @POST("/posts")
-        suspend fun postRequest():JsonObject
-
-
-        @Multipart
-        @POST("3/image")
-         suspend fun uploadImage(@Part() image: MultipartBody.Part?) : JsonObject
-
-    }
-
-    object jsonPlaceHolder {
-        val builder = Retrofit.Builder().baseUrl(BASE_URL)
-            .addConverterFactory(GsonConverterFactory.create(
-                GsonBuilder().setLenient().create()))
-            .client(Myinterceptor.addIntercepterImgur())
+    private fun getRetrofit(url:String): Retrofit {
+        return Retrofit.Builder().baseUrl(url)
+            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+            .client(Myinterceptor.addInterceptro())
             .build()
-        val retrofit = builder.create(ApiService::class.java)
     }
-    object uploadImage{
-        val builder = Retrofit.Builder().baseUrl(UPLOAD_URL)
-            .addConverterFactory(GsonConverterFactory.create(
-                GsonBuilder().setLenient().create()))
-            .client(Myinterceptor.addIntercepterImgur())
-            .build()
-        val retrofit = builder.create(ApiService::class.java)
-    }
+
+    val apiService_JsonPlaceholder: ApiService = getRetrofit(BASE_URL).create(ApiService::class.java)
+    val apiService_Imagur: ApiService = getRetrofit(UPLOAD_URL).create(ApiService::class.java)
 
 }
+
+//class RetrofitBuilder {
+//
+//    object jsonPlaceHolder {
+//        private fun getRetrofit(): Retrofit {
+//            return Retrofit.Builder()
+//                .baseUrl(BASE_URL)
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .build()
+//        }
+//
+//        val apiService: ApiService = getRetrofit().create(ApiService::class.java)
+//
+//
+//        val builder =
+//            Retrofit.Builder().baseUrl(BASE_URL)
+//            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
+//            .client(Myinterceptor.addIntercepterImgur())
+//            .build()
+//        val retrofit = builder.create(ApiService::class.java)
+//    }
+//
+//    object uploadImage {
+//        val builder = Retrofit.Builder().baseUrl(UPLOAD_URL)
+//            .addConverterFactory(GsonConverterFactory.create(
+//                GsonBuilder().setLenient().create()))
+//            .client(Myinterceptor.addIntercepterImgur())
+//            .build()
+//        val retrofit = builder.create(ApiService::class.java)
+//    }
+//
+//}

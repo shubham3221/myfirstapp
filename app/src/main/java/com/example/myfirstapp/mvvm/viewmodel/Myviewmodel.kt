@@ -39,6 +39,9 @@ class Myviewmodel(application: Application) : AndroidViewModel(application) {
     fun postRequest() = repositoryTesting.fetch_PostRequest()
     fun uploadImage(image:MultipartBody.Part) = repositoryTesting.uploadImgaeToServer(image)
 
+    //room
+
+
 
 //    fun getData(): MutableLiveData<ArrayList<Mymodel>> {
 //        return repo.getData()
@@ -71,11 +74,13 @@ class Myviewmodel(application: Application) : AndroidViewModel(application) {
 
     fun getPosts(num: Int){
         liveList.value?.let {
-            Log.e(TAG, "getPosts: not null" )
             liveList.postValue(it)
         } ?: kotlin.run {
-            Log.e(TAG, "getPosts:  null" )
             repositoryTesting.fetchSpecificPosts(num,liveList)
         }
+    }
+
+    fun getImages(){
+        repositoryTesting.getImages()
     }
 }

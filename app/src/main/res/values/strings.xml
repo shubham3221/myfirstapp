@@ -7,7 +7,7 @@
     <string name="first_name">check permissions</string>
 
     <string name="facebook_app_id">588691875446346</string>
-    <string name="fb_login_protocol_scheme">fb588691875446346</string>
+    <string name="fb_login_protocol_schemee">fb588691875446346</string>
     <string name="PIN_ID">1470342</string>
     <string name="goto_next_activity">goto next activity</string>
     <string name="request_permission">request permission</string>

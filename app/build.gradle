@@ -4,6 +4,7 @@ plugins {
     id 'kotlin-android-extensions'
 }
 apply plugin: 'com.google.gms.google-services'
+apply plugin: 'kotlin-kapt'
 
 android {
     compileSdkVersion 30
@@ -12,7 +13,6 @@ android {
     buildFeatures {
         viewBinding = true
     }
-
 
 
     defaultConfig {
@@ -38,6 +38,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -111,4 +114,24 @@ dependencies {
 
     //event bus
     implementation 'org.greenrobot:eventbus:3.2.0'
+
+    //room
+    def room_version = "2.3.0"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    annotationProcessor "androidx.room:room-compiler:$room_version"
+    kapt "androidx.room:room-compiler:2.3.0"
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation("androidx.room:room-ktx:$room_version")
+
+    //maps
+    implementation 'com.google.android.gms:play-services-maps:17.0.1'
+    //maps custer
+    implementation 'com.google.maps.android:android-maps-utils:0.5+'
+    //maps fuseLocation
+    implementation "com.google.android.gms:play-services-location:18.0.0"
+
+    //paging
+    implementation("androidx.paging:paging-runtime-ktx:3.0.0")
 }

@@ -24,7 +24,7 @@ class FacebookActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_facebook)
 
-        FacebookSdk.sdkInitialize(this)
+//        FacebookSdk.sdkInitialize(applicationContext)
         AppEventsLogger.activateApp(application)
         LoginManager.getInstance().logInWithReadPermissions(this, Arrays.asList("public_profile", "user_friends","email"))
 
@@ -51,12 +51,6 @@ class FacebookActivity : AppCompatActivity() {
             getFbInfo()
         }
 
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.e(TAG, "onActivityResult: ")
-        callbackManager.onActivityResult(requestCode, resultCode, data);
-        super.onActivityResult(requestCode, resultCode, data)
     }
     //
     private fun getFbInfo() {
@@ -103,5 +97,10 @@ class FacebookActivity : AppCompatActivity() {
         parameters.putString("fields", "email")
         request.parameters = parameters
         request.executeAsync()
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.e(TAG, "onActivityResult: ")
+        callbackManager.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

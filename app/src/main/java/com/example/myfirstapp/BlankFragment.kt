@@ -15,13 +15,18 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import com.example.myfirstapp.Myconstants.Companion.TAG
+import com.example.myfirstapp.databinding.FragmentBlankBinding
 import kotlinx.android.synthetic.main.activity_google.*
 import kotlinx.android.synthetic.main.fragment_blank.*
 import kotlinx.android.synthetic.main.fragment_blank.view.*
 
 
-class BlankFragment : Fragment() {
-    private var mview: View? = null
+class BlankFragment : Fragment(R.layout.fragment_blank) {
+    var _binding:FragmentBlankBinding? = null
+    val binding get() = _binding!!
+    val registerForActivityResult1 = registerForActivityResult(SimpleContract()) {
+        binding.textview.text = it!!
+    }
     lateinit var registerForActivityResult:ActivityResultLauncher<String>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,14 +36,26 @@ class BlankFragment : Fragment() {
             }
     }
 
-    @RequiresApi(Build.VERSION_CODES.M)
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        mview = inflater.inflate(R.layout.fragment_blank, container, false)
-        mview!!.textview.setOnClickListener {
-            registerForActivityResult.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-        }
-        return mview
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        _binding = FragmentBlankBinding.inflate(inflater,container,false)
+        val view = binding.root
+        return view
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.textview.text = "hi"
 
+        binding.textview.setOnClickListener {
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }

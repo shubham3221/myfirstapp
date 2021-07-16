@@ -61,7 +61,7 @@ class TwitterActivity : AppCompatActivity(), Myinterface {
         callback(true,0)
     }
 
-
+    @DelicateCoroutinesApi
     private fun getToken() {
         GlobalScope.launch(Dispatchers.Default) {
             val builder = ConfigurationBuilder()

@@ -28,6 +28,7 @@ object Myinterceptor {
 
         return httpClient.build()
     }
+
     fun addIntercepterImgur(): OkHttpClient{
         val logging = HttpLoggingInterceptor()
         logging.level = HttpLoggingInterceptor.Level.BODY
@@ -35,7 +36,6 @@ object Myinterceptor {
         val httpClient = OkHttpClient.Builder()
         httpClient.addInterceptor { chain ->
             val original = chain.request()
-
             // Request customization: add request headers
             val requestBuilder = original.newBuilder()
                 .header("Authorization", "Bearer "+"d76a7153e983213940780cbcc6f36621ec29b2aa") // <-- this is the important line

@@ -33,8 +33,6 @@ class GoogleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_google)
         checkboxPermission()
-        addAutoStartup()
-
         //first step
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestEmail()
@@ -48,7 +46,6 @@ class GoogleActivity : AppCompatActivity() {
         // Set the dimensions of the sign-in button.
         val signInButton = findViewById<SignInButton>(R.id.sign_in_button)
         signInButton.setSize(SignInButton.SIZE_STANDARD)
-
 
         //third step
         val registerForActivityResult =
@@ -67,38 +64,6 @@ class GoogleActivity : AppCompatActivity() {
 
 
     }
-    private fun addAutoStartup() {
-        try {
-            val intent = Intent()
-            val manufacturer = Build.MANUFACTURER
-            Log.e(TAG, "addAutoStartup: "+manufacturer )
-            if ("xiaomi".equals(manufacturer, ignoreCase = true)) {
-                intent.component = ComponentName("com.miui.securitycenter",
-                    "com.miui.permcenter.autostart.AutoStartManagementActivity")
-            } else if ("oppo".equals(manufacturer, ignoreCase = true)) {
-                intent.component = ComponentName("com.coloros.safecenter",
-                    "com.coloros.safecenter.permission.startup.StartupAppListActivity")
-            } else if ("vivo".equals(manufacturer, ignoreCase = true)) {
-                intent.component = ComponentName("com.vivo.permissionmanager",
-                    "com.vivo.permissionmanager.activity.BgStartUpManagerActivity")
-            } else if ("Letv".equals(manufacturer, ignoreCase = true)) {
-                intent.component = ComponentName("com.letv.android.letvsafe",
-                    "com.letv.android.letvsafe.AutobootManageActivity")
-            } else if ("Honor".equals(manufacturer, ignoreCase = true)) {
-                intent.component = ComponentName("com.huawei.systemmanager",
-                    "com.huawei.systemmanager.optimize.process.ProtectActivity")
-            }
-            val list =
-                packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
-            if (list.size > 0) {
-                Log.e(TAG, "success: " )
-                startActivity(intent)
-            }
-        } catch (e: Exception) {
-            Log.e("//", e.toString())
-        }
-    }
-
     private fun checkboxPermission() {
         val permissionCheck1 = ContextCompat.checkSelfPermission(this,
             Manifest.permission.WRITE_EXTERNAL_STORAGE)

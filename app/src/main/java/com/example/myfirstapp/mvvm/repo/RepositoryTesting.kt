@@ -26,13 +26,23 @@ class RepositoryTesting {
     var status: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
     var specificpostList: MutableLiveData<ArrayList<Postmodel>> = MutableLiveData<ArrayList<Postmodel>>()
 
-    fun getData(): MutableLiveData<ArrayList<Mymodel>> {
+    fun getImages(): MutableLiveData<ArrayList<Mymodel>> {
         liveData.value = ArrayList<Mymodel>().apply {
             this.add(Mymodel(R.drawable.facebook))
             this.add(Mymodel(R.drawable.apple))
             this.add(Mymodel(R.drawable.facebook))
             this.add(Mymodel(R.drawable.apple))
             this.add(Mymodel(R.drawable.facebook))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
+            this.add(Mymodel(R.drawable.apple))
             this.add(Mymodel(R.drawable.apple))
         }
         return liveData
@@ -56,30 +66,26 @@ class RepositoryTesting {
     }
 
     fun addingImage(number: Int): MutableLiveData<ArrayList<Mymodel>> {
-        Log.e(TAG, "start: ")
+        //checking if value is not null then add into same
         liveData.value?.apply {
-            Log.e(TAG, "in" + liveData.value!!.size)
             for (i in 0..number) {
-                Log.e(TAG, "first loop: ")
                 this.add(Mymodel(R.drawable.apple))
             }
             liveData.postValue(this)
         } ?: run {
-            Log.e(TAG, "out: ")
             liveData.value = ArrayList<Mymodel>().apply {
                 for (i in 0..number) {
-                    Log.e(TAG, "second loop: ")
                     this.add(Mymodel(R.drawable.apple))
                 }
+                liveData.postValue(this)
             }
         }
-        Log.e(TAG, "exit: ")
         return liveData
     }
 
     fun fetchSpecificPosts(num: Int, mdata: MutableLiveData<ArrayList<Postmodel>>) {
         status.value = true
-        RetrofitBuilder.jsonPlaceHolder.retrofit.getPosts()
+        RetrofitBuilder.apiService_JsonPlaceholder.getPosts()
             .enqueue(object : Callback<ArrayList<Postmodel>> {
 
                 override fun onResponse(
@@ -101,10 +107,10 @@ class RepositoryTesting {
     }
 
 
-    suspend fun getPosts() = RetrofitBuilder.jsonPlaceHolder.retrofit.getPostsWithSuspend()
-    suspend fun getSpecificPosts(num: Int) = RetrofitBuilder.jsonPlaceHolder.retrofit.getSpecific_WithSuspend(num)
-    suspend fun postRequest() = RetrofitBuilder.jsonPlaceHolder.retrofit.postRequest()
-    suspend fun uploadImage(image:MultipartBody.Part) = RetrofitBuilder.uploadImage.retrofit.uploadImage(image)
+    suspend fun getPosts() = RetrofitBuilder.apiService_JsonPlaceholder.getPostsWithSuspend()
+    suspend fun getSpecificPosts(num: Int) = RetrofitBuilder.apiService_JsonPlaceholder.getSpecific_WithSuspend(num)
+    suspend fun postRequest() = RetrofitBuilder.apiService_JsonPlaceholder.postRequest()
+    fun uploadImage(image:MultipartBody.Part) = RetrofitBuilder.apiService_Imagur.uploadImage(image)
 
 
     fun getPost(list: MutableLiveData<ArrayList<Postmodel>>) = liveData(Dispatchers.IO) {
@@ -136,7 +142,8 @@ class RepositoryTesting {
             emit(MyResult.error(null, e.message ?: "Error occured"))
         }
     }
-//
+
+
     fun uploadImgaeToServer(image: MultipartBody.Part) = liveData(Dispatchers.IO) {
         emit(MyResult.loading(null))
         try {
