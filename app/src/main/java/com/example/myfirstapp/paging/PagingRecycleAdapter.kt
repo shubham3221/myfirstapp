@@ -8,15 +8,14 @@ import com.example.myfirstapp.databinding.PagingRecycleLayoutBinding
 
 class PagingRecycleAdapter(var list:ArrayList<PagingDataClass>): RecyclerView.Adapter<PagingRecycleAdapter.MyPagingViewHolder>() {
 
-    class MyPagingViewHolder(val binding: PagingRecycleLayoutBinding) : RecyclerView.ViewHolder(binding.root)
+    inner class MyPagingViewHolder(val binding: PagingRecycleLayoutBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int):MyPagingViewHolder =
         MyPagingViewHolder(PagingRecycleLayoutBinding.inflate(
             LayoutInflater.from(parent.context), parent, false))
 
     override fun onBindViewHolder(holder: MyPagingViewHolder, position: Int) {
-        Log.e("//", "onBindViewHolder: " )
-        holder.binding.textView2.text = list[position].data.name
+        holder.binding.textView2.text = list[position].data.email
     }
 
     override fun getItemCount(): Int {

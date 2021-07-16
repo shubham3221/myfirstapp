@@ -15,6 +15,7 @@ class PagingActivity : AppCompatActivity() {
     lateinit var binding: ActivityPagingBinding
     lateinit var viewModel: PagingViewModel
     lateinit var adapter: PagingRecycleAdapter
+    var list = ArrayList<PagingDataClass>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,26 +24,22 @@ class PagingActivity : AppCompatActivity() {
 
         setupViewmodel()
         setupRecyclerview()
-        Handler(Looper.getMainLooper()).postDelayed(Runnable {
-            setObserver()
-        },3000)
-
+        setObserver()
 
     }
 
     private fun setObserver() {
         viewModel.getPosts("https://reqres.in/api/users/1").observe(this, { data ->
-            Log.e(TAG, "setObserver: "+data )
-            val arrayList = ArrayList<PagingDataClass>()
-            arrayList.add(data!!)
-            adapter.list = arrayList
-            adapter.notifyDataSetChanged()
+            val g = ArrayList<PagingDataClass>()
+            g.add(data!!)
+            adapter.updateAdapter(g)
         })
     }
 
     private fun setupRecyclerview() {
         binding.mRecycler.layoutManager = LinearLayoutManager(this)
-        adapter = PagingRecycleAdapter(ArrayList<PagingDataClass>())
+        adapter = PagingRecycleAdapter(ArrayList())
+        binding.mRecycler.adapter = adapter
     }
 
     private fun setupViewmodel() {

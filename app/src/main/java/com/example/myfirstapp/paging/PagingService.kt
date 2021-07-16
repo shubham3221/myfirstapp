@@ -21,6 +21,5 @@ interface PagingService {
             .client(Myinterceptor.addInterceptro())
             .build()
             .create(PagingService::class.java)
-
     }
 }
