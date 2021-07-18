@@ -2,8 +2,6 @@ package com.example.myfirstapp.paging
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -15,7 +13,7 @@ import kotlin.collections.ArrayList
 class PagingActivity : AppCompatActivity() {
     lateinit var binding: ActivityPagingBinding
     lateinit var viewModel: PagingViewModel
-    lateinit var adapter: PagingRecycleAdapter
+    lateinit var adapter: PagingAdapter2
     var list = ArrayList<PagingDataClass>()
     lateinit var linearLayoutManager: LinearLayoutManager
     var isLastPage: Boolean = false
@@ -33,20 +31,27 @@ class PagingActivity : AppCompatActivity() {
     }
 
     private fun setObserver() {
-        viewModel.getPosts("https://reqres.in/api/users/1").observe(this, { data ->
-            val g = ArrayList<PagingDataClass>()
-            for (i in 0..20){
-                g.add(data!!)
-            }
-            adapter.updateAdapter(g)
-        })
+//        viewModel.getPosts("https://reqres.in/api/users/1").observe(this, { data ->
+//            val g = ArrayList<PagingDataClass>()
+//            Log.e(TAG, "setObserver: "+g.get(0).data.email )
+//            adapter.updateAdapter(g)
+//        })
+
+        viewModel.getPosts2("https://reqres.in/api/users/1"){
+            Thread.sleep(1000)
+            list.add(it)
+            adapter.updateAdapter(list)
+        }
     }
 
     private fun setupRecyclerview() {
         linearLayoutManager = LinearLayoutManager(this)
         binding.mRecycler.layoutManager =linearLayoutManager
-        adapter = PagingRecycleAdapter(ArrayList())
+        list = ArrayList()
+        list.add(PagingDataClass(SubData(1,"efef","Sdf","sdf","Sdff")))
+        adapter = PagingAdapter2(list)
         binding.mRecycler.adapter = adapter
+
 
 
         binding.mRecycler.addOnScrollListener(object : PaginationScrollListener(linearLayoutManager) {

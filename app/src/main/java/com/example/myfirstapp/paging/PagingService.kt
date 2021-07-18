@@ -2,6 +2,7 @@ package com.example.myfirstapp.paging
 
 import com.example.myfirstapp.Myinterceptor
 import com.google.gson.JsonObject
+import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
@@ -10,7 +11,10 @@ import retrofit2.http.Url
 interface PagingService {
 
     @GET
-    suspend fun getUser(@Url url: String): PagingDataClass?
+    suspend fun getUser(@Url url: String): PagingDataClass
+
+    @GET
+    fun getUser2(@Url url: String): Call<PagingDataClass>
 
     companion object {
         val Baseurl = "https://reqres.in/api/users/1/"

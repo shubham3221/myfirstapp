@@ -22,7 +22,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
         <activity android:name=".paging.PagingActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <service
@@ -109,11 +113,7 @@
         <activity
             android:name=".mvvm.all_activities.ImageActivity"
             android:screenOrientation="sensor">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".GoogleMaps.MapsActivity">
 
