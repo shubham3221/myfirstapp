@@ -62,21 +62,6 @@ class MyFirebaseMessagingServices : FirebaseMessagingService() {
 
 
     }
-//    private fun showCustomPopupMenu() {
-//        val windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
-//        val layoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
-//        val view: View = layoutInflater.inflate(R.layout.mypopup, null)
-//        val layoutParams = WindowManager.LayoutParams(
-//            WindowManager.LayoutParams.WRAP_CONTENT,
-//            WindowManager.LayoutParams.WRAP_CONTENT,
-//            WindowManager.LayoutParams.TYPE_PHONE,
-//            WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-//            PixelFormat.TRANSLUCENT)
-//        layoutParams.gravity = Gravity.CENTER or Gravity.CENTER
-//        layoutParams.x = 0
-//        layoutParams.y = 0
-//        windowManager.addView(view, layoutParams)
-//    }
 
     override fun onDeletedMessages() {
         super.onDeletedMessages()

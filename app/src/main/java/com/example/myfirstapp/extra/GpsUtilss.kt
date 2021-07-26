@@ -1,4 +1,4 @@
-package com.example.myfirstapp.utils
+package com.example.myfirstapp.extra
 
 import android.app.Activity
 import android.content.ContentValues

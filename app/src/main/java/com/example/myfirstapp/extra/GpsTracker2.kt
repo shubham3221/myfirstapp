@@ -1,4 +1,4 @@
-package com.example.myfirstapp.utils
+package com.example.myfirstapp.extra
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,6 @@ import android.location.LocationManager
 import android.provider.Settings
 import android.util.Log
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat.startActivity
 import com.google.android.gms.location.*
 import java.util.*
 

@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/root"
     android:layout_height="match_parent"
     tools:context=".GoogleMaps.MapsActivity">
     <fragment
@@ -38,6 +39,50 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/location_TextView"/>
+
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:layout_width="0dp"
+        android:dropDownVerticalOffset="5dp"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:completionThreshold="2"
+        android:hint="where"
+        android:padding="8dp"
+        android:popupBackground="#EFEEEC"
+        android:singleLine="true"
+        android:textColorHint="#9c9c9c"
+        android:textSize="18sp"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/black"
+        android:id="@+id/place"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/location_TextView" />
+    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+        android:completionThreshold="2"
+        android:dropDownVerticalOffset="0dp"
+        android:hint="to go"
+        android:padding="8dp"
+        android:popupBackground="#EFEEEC"
+        android:singleLine="true"
+        android:textColorHint="#9c9c9c"
+        android:textSize="18sp"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:layout_margin="10dp"
+        android:background="@color/white"
+        android:textColor="@color/black"
+        android:id="@+id/placeToGo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/place" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

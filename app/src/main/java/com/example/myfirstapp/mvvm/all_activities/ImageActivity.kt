@@ -19,7 +19,7 @@ import com.example.myfirstapp.mvvm.model.Mymodel
 import com.example.myfirstapp.mvvm.viewmodel.Myviewmodel
 import com.example.myfirstapp.mvvm.viewmodel.Status
 import com.example.myfirstapp.paging.PagingActivity
-import com.example.myfirstapp.utils.PaginationScrollListener
+import com.example.myfirstapp.extra.PaginationScrollListener
 import kotlinx.android.synthetic.main.activity_image.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -38,7 +38,7 @@ class ImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_image)
-        observer = MyLifecycleObserver(activityResultRegistry)
+        observer = MyLifecycleObserver(activityResultRegistry,this)
         lifecycle.addObserver(observer)
 //        startActivity(Intent(this,RoomActivity::class.java))
 
@@ -101,7 +101,7 @@ class ImageActivity : AppCompatActivity() {
             registerForActivityResult(ActivityResultContracts.GetContent()) {
                 it?.let {
                     imageView.setImageURI(it)
-                    var file: File? = Utils.method4(this,uri = it)
+                    var file: File? = Utils.getRealPathAllinOne(this,uri = it)
 //                    file = try {
 //                        File(Utils().getRealPathFromRecent(this, it))
 //                    }catch (e:Exception){

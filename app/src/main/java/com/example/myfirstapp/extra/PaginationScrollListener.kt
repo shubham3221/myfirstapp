@@ -1,4 +1,4 @@
-package com.example.myfirstapp.utils
+package com.example.myfirstapp.extra
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

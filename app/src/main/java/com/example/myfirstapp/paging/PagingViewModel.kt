@@ -14,7 +14,7 @@ class PagingViewModel(val apiService: PagingService) :ViewModel() {
         try {
             emit(apiService.getUser(url))
         }catch (e:Exception){
-            Log.e(TAG, "getPosts: "+e.message )
+            Log.d(TAG, "emit Exception: "+e.message )
         }
     }
 

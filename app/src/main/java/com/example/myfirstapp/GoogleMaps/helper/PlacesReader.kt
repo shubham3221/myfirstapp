@@ -1,6 +1,9 @@
-package com.example.myfirstapp.GoogleMaps
+package com.example.myfirstapp.GoogleMaps.helper
 
 import android.content.Context
+import com.example.myfirstapp.GoogleMaps.Place
+import com.example.myfirstapp.GoogleMaps.PlaceResponse
+import com.example.myfirstapp.GoogleMaps.toPlace
 import com.example.myfirstapp.R
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken

@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
-        <activity android:name=".paging.PagingActivity">
+        <activity android:name=".testing.TestingActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,17 @@
         </activity>
 
         <service
-            android:name=".utils.GpsTracker"
+            android:name=".services.MyService"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".services.ServiceActivity">
+
+        </activity>
+        <activity android:name=".paging.PagingActivity" />
+
+        <service
+            android:name=".extra.GpsTracker"
             tools:ignore="Instantiatable" />
 
         <meta-data
@@ -112,12 +122,8 @@
         <activity android:name=".MainActivity" />
         <activity
             android:name=".mvvm.all_activities.ImageActivity"
-            android:screenOrientation="sensor">
-
-        </activity>
-        <activity android:name=".GoogleMaps.MapsActivity">
-
-        </activity>
+            android:screenOrientation="sensor" />
+        <activity android:name=".GoogleMaps.MapsActivity"></activity>
     </application>
 
 </manifest>

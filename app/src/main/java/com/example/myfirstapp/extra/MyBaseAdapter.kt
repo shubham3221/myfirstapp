@@ -4,7 +4,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-
 fun <ITEM> RecyclerView.setUp(items: List<ITEM>,
                               layoutResId: Int,
                               bindHolder: View.(ITEM) -> Unit,

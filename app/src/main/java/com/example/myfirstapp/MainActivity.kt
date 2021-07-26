@@ -4,10 +4,13 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.myfirstapp.extra.JSONConvertable
 import kotlinx.android.synthetic.main.activity_main_2.*
 
-data class Modelclass(val image:Int, val name:String, val info:String )
+data class Modelclass(val image:Int, val name:String, val info:String ):JSONConvertable
 
 class MainActivity : AppCompatActivity() {
     val arr= arrayListOf<Modelclass>()
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
         mAdapter = Myadapter(arr)
         mRecycler.layoutManager = GridLayoutManager(applicationContext,2)
         mRecycler.adapter = mAdapter
+
 
         logout.setOnClickListener {
             val sharedPref:SharedPreferences = getSharedPreferences(Myconstants.KEY,

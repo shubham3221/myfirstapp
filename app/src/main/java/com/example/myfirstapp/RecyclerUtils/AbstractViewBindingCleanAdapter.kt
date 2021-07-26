@@ -22,7 +22,7 @@ abstract class AbstractViewBindingCleanAdapter<T, VB : ViewBinding>(
     }
 
     override fun onBindViewHolder(holder: AbstractViewHolder<VB>, position: Int) {
-        val item = getItem(holder.bindingAdapterPosition)
+        val item = getItem(holder.adapterPosition)
         bindItems(item, position, itemCount, holder.binding, holder.itemView.context)
     }
 

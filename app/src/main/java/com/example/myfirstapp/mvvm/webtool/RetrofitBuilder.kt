@@ -20,6 +20,7 @@ object RetrofitBuilder {
     const val END_POINT = "posts"
     private const val UPLOAD_URL = "https://api.imgur.com/"
     private const val IMGUR_TOKEN = "d76a7153e983213940780cbcc6f36621ec29b2aa"
+    private const val DIRECTIONS = "https://api.openrouteservice.org/v2/directions/"
 
     private fun getRetrofit(url:String): Retrofit {
         return Retrofit.Builder().baseUrl(url)
@@ -30,7 +31,7 @@ object RetrofitBuilder {
 
     val apiService_JsonPlaceholder: ApiService = getRetrofit(BASE_URL).create(ApiService::class.java)
     val apiService_Imagur: ApiService = getRetrofit(UPLOAD_URL).create(ApiService::class.java)
-
+    val apiService_GoogleMaps: ApiServiceMaps = getRetrofit(DIRECTIONS).create(ApiServiceMaps::class.java)
 }
 
 //class RetrofitBuilder {

@@ -1,9 +1,8 @@
-package com.example.myfirstapp.utils;
+package com.example.myfirstapp.extra;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Service;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -15,10 +14,8 @@ import android.os.IBinder;
 import android.provider.Settings;
 import android.util.Log;
 
-import kotlin.jvm.Synchronized;
 
-
-public class GpsTracker extends Service implements LocationListener {
+public class GpsTrackerJava extends Service implements LocationListener {
 
     private Context mContext;
 
@@ -47,7 +44,7 @@ public class GpsTracker extends Service implements LocationListener {
     protected LocationManager locationManager;
     private LocationChangedListener changedListener;
 
-    public GpsTracker(Context context) {
+    public GpsTrackerJava(Context context) {
         Log.e("//", "GpsTracker: " );
         this.mContext = context;
         changedListener = (LocationChangedListener) context;
@@ -127,7 +124,7 @@ public class GpsTracker extends Service implements LocationListener {
      * */
     public void stopUsingGPS() {
         if (locationManager != null) {
-            locationManager.removeUpdates(GpsTracker.this);
+            locationManager.removeUpdates(GpsTrackerJava.this);
         }
     }
 
@@ -202,6 +199,8 @@ public class GpsTracker extends Service implements LocationListener {
         }
     }
 
+
+
     @Override
     public void onLocationChanged(Location location) {
         changedListener.locationChanged(location);
@@ -212,6 +211,7 @@ public class GpsTracker extends Service implements LocationListener {
         Log.e("//", "onProviderDisabled: "+provider );
         showSettingsAlert();
     }
+
 
     @Override
     public void onProviderEnabled(String provider) {
