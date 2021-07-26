@@ -18,8 +18,6 @@ class TestingActivity : AppCompatActivity() {
         setContentView(R.layout.activity_testing)
         binding = ActivityTestingBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-
         //setuplist
         var list1 = ArrayList<TestingModel>()
         list1.add(TestingModel("shubham"))
