@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import org.greenrobot.eventbus.EventBus
 data class JobData(var command:String,var id:Int)
+data class ProgressUpdates(var process:Int)
 class MyBroadcastReceiver: BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         when(intent!!.action){
@@ -26,6 +27,9 @@ class MyBroadcastReceiver: BroadcastReceiver() {
             }
             "stop-service" -> {
                 EventBus.getDefault().post(JobData("stop_service", -1))
+            }
+            "progress" -> {
+                EventBus.getDefault().post(ProgressUpdates(intent.getIntExtra("progress",0)))
             }
             else -> {
                 EventBus.getDefault().post(JobData("nothing",intent.getIntExtra("id",0)))

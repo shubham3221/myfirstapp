@@ -97,6 +97,7 @@ class ImageActivity : AppCompatActivity() {
 //                }
 //            })
         }
+
         val getContent =
             registerForActivityResult(ActivityResultContracts.GetContent()) {
                 it?.let {
@@ -236,8 +237,6 @@ class ImageActivity : AppCompatActivity() {
     }
 
     private fun setObserver() {
-
-
 //        viewModel.liveData.observe(this, Observer {
 //            Log.e(TAG, "observer called: ")
 //            madapter.updateAdapter(it)
@@ -254,9 +253,5 @@ class ImageActivity : AppCompatActivity() {
 //        viewModel.getStatus().observe(this, Observer {
 ////            Log.e(TAG, "status: $it")
 //        })
-
-
     }
-
-
 }

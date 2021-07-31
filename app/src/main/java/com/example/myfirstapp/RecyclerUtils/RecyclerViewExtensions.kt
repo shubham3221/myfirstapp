@@ -9,9 +9,13 @@ import android.graphics.Color
 import android.graphics.Rect
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.GradientDrawable
+import android.icu.lang.UCharacter
+import android.util.TypedValue
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Adapter
+import android.widget.AdapterView
 import androidx.annotation.DimenRes
 import androidx.core.animation.doOnEnd
 import androidx.core.content.ContextCompat
@@ -24,7 +28,23 @@ import com.google.android.material.snackbar.Snackbar
 /**
  * Created by hristijan on 3/4/19 to long live and prosper !
  */
+inline fun <T : Adapter> AdapterView<T>.onItemSelected(crossinline action: (parent: AdapterView<*>?, view: View?, position: Int, id: Long) -> Unit = { _, _, _, _ -> }) {
+    onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        override fun onNothingSelected(parent: AdapterView<*>?) = Unit
+        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) =
+            action(parent, view, position, id)
+    }
+}
 
+/**
+ * Returns the default, clear background for selectable items.  Reacts when touched.
+ */
+val View.selectableItemBackgroundResource: Int
+    get() {
+        val outValue = TypedValue()
+        context.theme.resolveAttribute(android.R.attr.selectableItemBackground, outValue, true)
+        return outValue.resourceId
+    }
 
 val <VH> RecyclerView.Adapter<VH>.isEmpty: Boolean where VH : RecyclerView.ViewHolder
     get() = itemCount == 0
@@ -140,8 +160,8 @@ fun Context.fullLinearRecycler(rvAdapter: RecyclerView.Adapter<*>? = null, confi
 /**
  * Sets a linear layout manager along with an adapter
  */
-fun RecyclerView.withLinearAdapter(rvAdapter: RecyclerView.Adapter<*>) = apply {
-    layoutManager = LinearLayoutManager(context)
+fun RecyclerView.withLinearAdapter(rvAdapter: RecyclerView.Adapter<*> , orientation: Int = 1) = apply {
+    layoutManager = LinearLayoutManager(context,orientation,false)
     adapter = rvAdapter
 }
 

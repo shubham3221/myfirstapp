@@ -2,57 +2,67 @@ package com.example.myfirstapp.notifications
 
 import android.annotation.SuppressLint
 import android.app.*
-import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Binder
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
+import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.myfirstapp.Myconstants.Companion.CHANNAL_ID
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import kotlinx.coroutines.*
-import okhttp3.internal.notify
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
-data class NotificationData(var progress:Int,var jobs:Job , var notification: NotificationCompat.Builder)
+data class NotificationData(
+    var progress: Int,
+    var jobs: Job,
+    var notification: NotificationCompat.Builder
+)
 
 open class MyService_OLD : Service() {
     private val mBinder: IBinder = MyBinder()
     private lateinit var notificationManager: NotificationManagerCompat
     private lateinit var broadcastReceiver: MyBroadcastReceiver
     private lateinit var notification: NotificationCompat.Builder
-    private var progressMap = mutableMapOf<Int,Int>()
-    private var jobs = mutableMapOf<Int,Job>()
+    private var progressMap = mutableMapOf<Int, Int>()
+    private var jobs = mutableMapOf<Int, Job>()
     var jobss = mutableListOf<NotificationData>()
-
+    private val coroutineJob = SupervisorJob()
+    private val scope = CoroutineScope(Dispatchers.Default + coroutineJob)
 
     inner class MyBinder : Binder() {
         val service: MyService_OLD
             get() = this@MyService_OLD
     }
 
+
     override fun onBind(intent: Intent): IBinder {
-        Log.e(TAG, "onBind: " )
+        Log.e(TAG, "onBind: ")
         return mBinder
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.e("//", "onStartCommand: startid: "+startId )
+        Log.e("//", "onStartCommand: startid: " + startId)
 //        forground_notification()?.build()?.let {
 //            startForeground(1, it)
 //        }
         return START_STICKY
     }
-    fun createNotification(id:Int){
-        create_Notification(id)
+    fun createNotification(id: Int){
+        create_Notification(id,false)
     }
 
-    fun create_Notification(id: Int): NotificationCompat.Builder {
+    fun create_Notification(id: Int , showNotifiaction:Boolean): NotificationCompat.Builder? {
+        if (!showNotifiaction){
+            jobs.put(id, downloadFile(id, null))
+            return null
+        }
         if (!::notificationManager.isInitialized) notificationManager =
             NotificationManagerCompat.from(this)
         val intent = Intent(this, NotificationActivity::class.java).apply {
@@ -66,7 +76,7 @@ open class MyService_OLD : Service() {
         //Sets the maximum progress as 100
         val progressMax = 100
         //Creating a notification and setting its various attributes
-        notification = NotificationCompat.Builder(this, "Progress Notification")
+        notification = NotificationCompat.Builder(this, CHANNAL_ID)
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Downloading")
 //                .setContentText("Downloading")
@@ -77,17 +87,17 @@ open class MyService_OLD : Service() {
                 .setProgress(progressMax, 0, true)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-        addButtonNotification("pause",id)
+        addButtonNotification("pause", id)
 
         //Initial Alert
-        jobs.put(id,downloadFile(id,notification))
-        Log.e(TAG, "create_Notification: "+jobs )
+        jobs.put(id, downloadFile(id, notification))
+        Log.e(TAG, "create_Notification: " + jobs)
         return notification
     }
 
     @SuppressLint("RestrictedApi")
-    private fun addButtonNotification(action:String, id: Int) {
-        Log.e(TAG, "addButtonNotification: "+id)
+    private fun addButtonNotification(action: String, id: Int) {
+        Log.e(TAG, "addButtonNotification: " + id)
         notification.mActions.clear()
         Intent().apply {
             this.action = action
@@ -111,31 +121,35 @@ open class MyService_OLD : Service() {
     }
 
     @SuppressLint("RestrictedApi")
-    fun downloadFile(id: Int, notification: NotificationCompat.Builder) : Job{
-        return  CoroutineScope(Dispatchers.Default).launch {
+    fun downloadFile(id: Int, notification: NotificationCompat.Builder?) : Job{
+        return  scope.launch {
             var process = 0
             if (progressMap.get(id) != null){
                 process = progressMap.get(id)!!
             }
             while (process != 100 && isActive) {
-                delay(1000)
+                delay(200)
                 process += 2
-                progressMap.put(id,process)
-                notification.setContentText("$process%")
-                    .setProgress(100, process, false)
-                notificationManager.notify(id, notification.build())
+                progressMap.put(id, process)
+                notification?.setContentText("$process%")
+                    ?.setProgress(100, process, false)
+                notification?.let { notificationManager.notify(id, it.build()) }
+                EventBus.getDefault().post(ProgressUpdates(process))
             }
             launch {
                 Log.e(TAG, "download complete: removing id $id")
                 jobs.remove(id)
                 progressMap.remove(id)
-                notification.setContentText("Download complete")
-                    .setProgress(0, 0, false)
-                    .setOngoing(false)
-                notification.mActions.clear()
-                notificationManager.notify(id, notification.build())
+                notification?.setContentText("Download complete")
+                    ?.setProgress(0, 0, false)
+                    ?.setOngoing(false)
+                notification?.mActions?.clear()
+                notification?.let { notificationManager.notify(id, it.build()) }
                 if (jobs.isEmpty()){
                     stopForeground(true)
+                    stopSelf()
+                } else {
+                    Log.e(TAG, "downloadFile: jobs exists: size: ${jobs.size}")
                 }
             }
         }
@@ -151,7 +165,7 @@ open class MyService_OLD : Service() {
                 notificationManager.cancel(jobData.id)
                 jobs.remove(jobData.id)
                 if (jobs.isEmpty()) {
-                    Log.e(TAG, "eventActionTrigger: stop self called" )
+                    Log.e(TAG, "eventActionTrigger: stop self called")
                     stopForeground(true)
                     stopSelf()
                 } else {
@@ -159,16 +173,16 @@ open class MyService_OLD : Service() {
                 }
             }
             "pause" -> {
-                Log.e(TAG, "eventActionTrigger: pause job id: "+jobData.id)
+                Log.e(TAG, "eventActionTrigger: pause job id: " + jobData.id)
                 jobs.get(jobData.id)!!.cancel()
 //                jobs.remove(jobData.id)
-                addButtonNotification("resume",jobData.id)
+                addButtonNotification("resume", jobData.id)
             }
 
             "resume" -> {
-                Log.e(TAG, "eventActionTrigger: resume job id: "+jobData.id)
-                jobs.set(jobData.id,downloadFile(jobData.id,notification))
-                addButtonNotification("pause",jobData.id)
+                Log.e(TAG, "eventActionTrigger: resume job id: " + jobData.id)
+                jobs.set(jobData.id, downloadFile(jobData.id, notification))
+                addButtonNotification("pause", jobData.id)
             }
 
             "stop_service" -> {
@@ -186,7 +200,7 @@ open class MyService_OLD : Service() {
 
     override fun onCreate() {
         super.onCreate()
-        Log.e(TAG, "onCreate: service", )
+        Log.e(TAG, "onCreate: service")
         EventBus.getDefault().register(this)
         broadcastReceiver = MyBroadcastReceiver()
         val intentFilter = IntentFilter()
@@ -227,7 +241,8 @@ open class MyService_OLD : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.e(TAG, "onDestroy: service" )
+        Log.e(TAG, "onDestroy: service")
+        coroutineJob.cancel()
         EventBus.getDefault().unregister(this)
         unregisterReceiver(broadcastReceiver)
     }

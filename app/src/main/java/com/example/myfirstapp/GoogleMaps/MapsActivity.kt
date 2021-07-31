@@ -23,6 +23,7 @@ import com.example.myfirstapp.GoogleMaps.helper.MapsHelper.moveCamera
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import com.example.myfirstapp.Status2
+import com.example.myfirstapp.extentions.LocaleHelper
 import com.example.myfirstapp.extra.*
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
@@ -35,6 +36,7 @@ import com.google.android.gms.tasks.Task
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.activity_maps.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
@@ -259,7 +261,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, LocationChangedLis
 
 
     private fun apiCallForDirection() {
-
         MapApiHelper.getDirectionsApi("${where!!.longitude},${where!!.latitude}",
             "${toWhere!!.longitude} , ${toWhere!!.latitude}")
             .observe(this@MapsActivity, {

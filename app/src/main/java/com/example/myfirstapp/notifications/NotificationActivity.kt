@@ -1,10 +1,7 @@
 package com.example.myfirstapp.notifications
 
 import android.app.*
-import android.content.ComponentName
-import android.content.Context
-import android.content.Intent
-import android.content.ServiceConnection
+import android.content.*
 import android.media.RingtoneManager
 import android.net.Uri
 import android.os.Build
@@ -16,12 +13,16 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.myfirstapp.Myconstants
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.R
 import com.example.myfirstapp.googlesdk.GoogleActivity
+import com.example.myfirstapp.services.MyService
 import kotlinx.android.synthetic.main.activity_image.view.*
 import kotlinx.android.synthetic.main.activity_notification.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -35,19 +36,38 @@ class NotificationActivity : AppCompatActivity() {
     private var notifManager: NotificationManager? = null
     private lateinit var notificationManager: NotificationManagerCompat
 
-    var mService: MyService_OLD? = null
+    var mService: MyService_Music? = null
     var mIsBound: Boolean? = null
-    val serviceConnection = object : ServiceConnection {
+    var serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName?, service: IBinder?) {
-            val binder = service as MyService_OLD.MyBinder
+            val binder = service as MyService_Music.MyBinder
             mService = binder.service
             mIsBound = true
+            Log.e(TAG, "onServiceConnected: ")
         }
 
         override fun onServiceDisconnected(name: ComponentName?) {
             mIsBound = false
+            Log.e(TAG, "onServiceDisconnected: ")
         }
     }
+
+
+    //Connection to the Service
+    private fun doBindService() {
+
+        val intent = Intent(this, MyService_Music::class.java)
+        bindService(intent, serviceConnection,
+            BIND_AUTO_CREATE)
+    }
+
+    override fun onResume() {
+        if (isMyServiceRunning(MyService_Music::class.java)){
+            doBindService()
+        }
+        super.onResume()
+    }
+
 
 
     @RequiresApi(Build.VERSION_CODES.M)
@@ -55,20 +75,24 @@ class NotificationActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notification)
         EventBus.getDefault().register(this)
-        if (isMyServiceRunning(MyService_OLD::class.java)) start_service.text = "Stop Service"
+        if (isMyServiceRunning(MyService_Music::class.java)) start_service.text = "Stop Service"
 
-        Log.e(TAG, "onCreate: is service running? : " + isMyServiceRunning(MyService_OLD::class.java))
+        Log.e(TAG,
+            "onCreate: is service running? : " + isMyServiceRunning(MyService_Music::class.java))
 
         start_service.setOnClickListener {
-            if (isMyServiceRunning(MyService_OLD::class.java)){
+            if (isMyServiceRunning(MyService_Music::class.java)){
                 start_service.text = "Start Service"
-                stopService(Intent(this, MyService_OLD::class.java))
+                stopService(Intent(this, MyService_Music::class.java))
+                unbindService(serviceConnection)
+
             }else{
-                val intent = Intent(this, MyService_OLD::class.java)
+                val intent = Intent(this, MyService_Music::class.java)
                 startService(intent)
                 bindService(intent, serviceConnection, Context.BIND_AUTO_CREATE)
                 start_service.text = "Stop Service"
             }
+
 
 //            startDownload(2001)
 //            displayCustomNotificationForOrders("title 1","first notifiaction",1001)
@@ -87,11 +111,17 @@ class NotificationActivity : AppCompatActivity() {
 
         }
 
+        play_music.setOnClickListener {
+            mService?.playSong()
+        }
+
+        stop_music.setOnClickListener {
+            mService?.stopPlay()
+        }
+
 
         start_download.setOnClickListener {
-            mService?.let {
-                it.createNotification(++jobid)
-            }
+//            mService?.createNotification(++jobid)
 //            displayCustomNotificationForOrders("title 2", "second notifiaction", 1002)
         }
 
@@ -101,8 +131,9 @@ class NotificationActivity : AppCompatActivity() {
         }
 
         update_second.setOnClickListener {
-            val notificationManager = ContextCompat.getSystemService(this, NotificationManager::class.java) as NotificationManager
-            notificationManager.showNotification(1001,"notification body",this)
+            val notificationManager = ContextCompat.getSystemService(this,
+                NotificationManager::class.java) as NotificationManager
+            notificationManager.showNotification(1001, "notification body", this)
         }
     }
 
@@ -156,9 +187,13 @@ class NotificationActivity : AppCompatActivity() {
 
             val intent = Intent(this, GoogleActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            val pendingIntent: PendingIntent? = PendingIntent.getActivity(this, id, intent, PendingIntent.FLAG_ONE_SHOT)
+            val pendingIntent: PendingIntent? = PendingIntent.getActivity(this,
+                id,
+                intent,
+                PendingIntent.FLAG_ONE_SHOT)
             val defaultSoundUri: Uri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
-            val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(this,Myconstants.CHANNAL_ID)
+            val notificationBuilder: NotificationCompat.Builder = NotificationCompat.Builder(this,
+                Myconstants.CHANNAL_ID)
                 .setContentTitle(title)
                 .setContentText(description)
                 .setAutoCancel(true)
@@ -170,7 +205,7 @@ class NotificationActivity : AppCompatActivity() {
                     description))
             val notificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            Intent(this,MyBroadcastReceiver::class.java).apply {
+            Intent(this, MyBroadcastReceiver::class.java).apply {
                 this.action = "a"
                 val broadcast = PendingIntent.getBroadcast(this@NotificationActivity,
                     id,
@@ -198,5 +233,11 @@ class NotificationActivity : AppCompatActivity() {
     fun getNotify(dataPicker: DataPicker) {
         Log.e(TAG, "getNotify: ")
         AlertDialog.Builder(this).setMessage(dataPicker.data).create().show()
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN_ORDERED)
+    fun updateProgress(progress: ProgressUpdates) {
+        Log.e(TAG, "updateProgress1: ")
+        progress_bar.progress = progress.process
     }
 }

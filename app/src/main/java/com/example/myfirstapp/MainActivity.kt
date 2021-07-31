@@ -4,13 +4,40 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.os.Parcel
+import android.os.Parcelable
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myfirstapp.extra.JSONConvertable
+import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.activity_main_2.*
 
-data class Modelclass(val image:Int, val name:String, val info:String ):JSONConvertable
+data class Modelclass(val image:Int, val name: String?, val info: String?):JSONConvertable , Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString(),
+        parcel.readString()) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(image)
+        parcel.writeString(name)
+        parcel.writeString(info)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Modelclass> {
+        override fun createFromParcel(parcel: Parcel): Modelclass {
+            return Modelclass(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Modelclass?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
 
 class MainActivity : AppCompatActivity() {
     val arr= arrayListOf<Modelclass>()

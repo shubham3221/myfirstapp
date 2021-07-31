@@ -16,7 +16,10 @@ class RoomViewModel(application: Application) : AndroidViewModel(application) {
     var users = MutableLiveData<List<EntityClass.User>>()
     var user = MutableLiveData<EntityClass.User>()
     var singleUser = MutableLiveData<List<EntityClass.User>>()
+
+
     val repo: RoomRepository
+
     init {
         repo = RoomRepository(dbHelper)
     }
@@ -44,11 +47,14 @@ class RoomViewModel(application: Application) : AndroidViewModel(application) {
 
 
 
+
+
     fun getUserById2(id:Int) = liveData(Dispatchers.IO) {
         emit("loading")
         try {
             val userById = dbHelper.getUserById(id)
             Log.e(TAG, "getUserById2: " )
+            emit(userById)
         }catch (e:Exception){
             Log.e(TAG, "getUserById2: 3" )
             emit(e.message)

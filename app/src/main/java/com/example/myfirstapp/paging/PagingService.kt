@@ -14,7 +14,10 @@ interface PagingService {
     suspend fun getUser(@Url url: String): PagingDataClass
 
     @GET
-    fun getUser2(@Url url: String): Call<PagingDataClass>
+    suspend fun getUser2(@Url url: String): Call<PagingDataClass>
+
+    @GET
+    fun getUser3(@Url url: String): Call<PagingDataClass>
 
     companion object {
         val Baseurl = "https://reqres.in/api/users/1/"

@@ -1,0 +1,44 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_content"
+    android:layout_width="match_parent"
+    android:background="@color/music_background"
+    android:layout_height="match_parent">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mRecycler"/>
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progress_bar"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:indeterminateTint="@color/white"
+        android:layout_height="wrap_content"/>
+
+    <include layout="@layout/bottom_sheet_layout"
+        android:layout_width="match_parent"
+        android:id="@+id/sheet"
+        android:layout_height="wrap_content"
+        android:background="@drawable/round_top_view"
+        android:backgroundTint="@color/sheet_background"
+        app:behavior_hideable="true"
+        app:behavior_peekHeight="50dp"
+        app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
+    </include>
+
+    <ImageView
+        android:id="@+id/swap"
+        android:background="@drawable/round_corner"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:src="@drawable/swipe"
+        android:backgroundTint="#70FFFFFF"
+        app:layout_anchor="@+id/sheet"
+        app:layout_anchorGravity="top|center" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

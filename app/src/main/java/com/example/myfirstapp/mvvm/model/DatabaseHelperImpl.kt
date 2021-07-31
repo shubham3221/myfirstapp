@@ -25,5 +25,4 @@ class DatabaseHelperImpl(private val appDatabase: AppDatabase) {
 
     suspend fun showOnlynameEmail() = appDatabase.userDao().showOnly_Name_Email()
 
-
 }

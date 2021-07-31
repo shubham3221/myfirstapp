@@ -1,13 +1,29 @@
 package com.example.myfirstapp.extra
 
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Parcelable
+import android.view.View
+import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.PopupMenu
 import android.widget.TextView
+import androidx.annotation.ColorInt
+import androidx.annotation.RequiresApi
+import androidx.annotation.UiThread
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 import androidx.core.content.edit
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.myfirstapp.Modelclass
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -16,6 +32,38 @@ import retrofit2.HttpException
 import kotlin.Exception
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
+
+
+/**
+ * Restarts an activity from itself with a fade animation
+ * Keeps its existing extra bundles and has a intentBuilder to accept other parameters
+ */
+
+/**
+ * Extension method to startActivity with Animation for Context.
+ */
+inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0) {
+    val intent = Intent(this, T::class.java)
+    val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
+    ContextCompat.startActivity(this, intent, bundle)
+}
+fun View.toggleVisibility() : View {
+    if (visibility == View.VISIBLE) {
+        visibility = View.GONE
+    } else {
+        visibility = View.VISIBLE
+    }
+    return this
+}
+fun Context.isMyServiceRunning(serviceClass: Class<*>): Boolean {
+    val manager = getSystemService(AppCompatActivity.ACTIVITY_SERVICE) as ActivityManager
+    for (service in manager.getRunningServices(Int.MAX_VALUE)) {
+        if (serviceClass.name == service.service.className) {
+            return true
+        }
+    }
+    return false
+}
 
 fun EditText.onAction(action: Int, runAction: (TextView) -> Unit) {
         this.setOnEditorActionListener { v, actionId, event ->

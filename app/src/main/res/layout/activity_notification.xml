@@ -10,7 +10,7 @@
         android:id="@+id/start_service"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start service"
+        android:text="start bound service"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -23,6 +23,25 @@
         app:layout_constraintTop_toBottomOf="@+id/start_service" />
 
     <Button
+        android:id="@+id/play_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Play Music"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/start_download" />
+
+    <Button
+        android:id="@+id/stop_music"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Music"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/play_music"
+        app:layout_constraintTop_toTopOf="@+id/play_music" />
+
+
+    <Button
+        android:visibility="gone"
         android:id="@+id/update_first"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -31,12 +50,22 @@
         app:layout_constraintTop_toBottomOf="@+id/start_download" />
 
     <Button
+        android:visibility="gone"
         android:id="@+id/update_second"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="update second notification"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/update_first" />
+
+    <ProgressBar
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:id="@+id/progress_bar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/play_music" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

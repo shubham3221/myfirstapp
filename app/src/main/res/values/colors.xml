@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="myapp_color">#001733</color>
+    <color name="music_background">#060E20</color>
+    <color name="sheet_background">#19202E</color>
 </resources>

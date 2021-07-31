@@ -5,12 +5,17 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.getSystemService
 import com.example.myfirstapp.Myconstants
 import com.example.myfirstapp.R
 import com.example.myfirstapp.googlesdk.GoogleActivity
 
-// Notification ID.
+// Notification ID
 private val FLAGS = 0
+fun Context.removeNotification(id: Int = 0) {
+    getSystemService<NotificationManagerCompat>()?.cancel(id)
+}
 
 fun NotificationManager.showNotification(notificationID: Int, messageBody: String, applicationContext: Context) {
     // Create the content intent for the notification, which launches
