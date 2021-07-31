@@ -151,7 +151,6 @@ class StepsFragment : Fragment(), SensorEventListener {
                 MagnitudePrevious = magnitude
                 Log.e("//","mangnitude: $MagnitudePrevious step: ${steps} x: ${x_acceleration} y: ${y_acceleration} z: ${z_acceleration}")
 
-
                     if (magnitude >= 13) {
                         if (!scopeRunning){
                             scopeRunning = true
