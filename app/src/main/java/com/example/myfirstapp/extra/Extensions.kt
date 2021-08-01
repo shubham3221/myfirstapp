@@ -24,7 +24,7 @@ import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.myfirstapp.HandleErrorBody
 import com.example.myfirstapp.Modelclass
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -232,6 +232,7 @@ fun Exception.toJSONObject(e: Exception): JSONObject? {
     }
     return null
 }
+
 fun Exception.toJSONString(e: Exception): String? {
     when (e) {
         is SocketException -> "Bad Internet"
@@ -246,6 +247,21 @@ fun Exception.toJSONString(e: Exception): String? {
         is UnknownHostException -> "Connection Error"
     }
     return null
+}
+fun Exception.toJSONString2(e: Exception): HandleErrorBody {
+    when (e) {
+        is SocketException -> HandleErrorBody(false,"Bad Internet")
+        is HttpException -> {
+            val response = e.response()
+            response?.let {
+                it.errorBody()?.let { body->
+                    return HandleErrorBody(true,body.charStream().readText())
+                }
+            }
+        }
+        is UnknownHostException -> HandleErrorBody(false,"Connection Error")
+    }
+    return HandleErrorBody(false,null)
 }
 
 interface JSONConvertable {

@@ -14,6 +14,7 @@ enum class Status2 {
     ERROR,
     LOADING
 }
+data class HandleErrorBody(val isjson:Boolean = false , val messsage:String?)
 
 data class MyResult2<out T>(val status: Status2, val data: T? , val message: String? , val jsonObject: JSONObject?) {
 
