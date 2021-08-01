@@ -4,8 +4,14 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
+import com.example.myfirstapp.MyResult2
 import com.example.myfirstapp.Myconstants.Companion.TAG
+import com.example.myfirstapp.Status2
+import com.example.myfirstapp.extra.toJSONObject
+import com.example.myfirstapp.extra.toJSONString
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Response
 import retrofit2.awaitResponse
@@ -13,17 +19,11 @@ import retrofit2.awaitResponse
 class PagingViewModel(val apiService: PagingService) :ViewModel() {
 
     fun getPosts(url:String) = liveData(Dispatchers.IO) {
+        emit(MyResult2.loading())
         try {
-            emit(apiService.getUser(url))
+            emit(MyResult2.success(apiService.getUser(url)))
         }catch (e:Exception){
-            Log.d(TAG, "emit Exception: "+e.message )
-        }
-    }
-    fun getPosts2(url:String) {
-        viewModelScope.makeApiCall(suspend { apiService.getUser2(url).execute() }, {
-            Log.e(TAG, "getPosts2: "+it.message )
-        }){ data->
-            Log.e(TAG, "getPosts2: "+data?.data?.email)
+            emit(MyResult2.error(null,e.toJSONString(e)!!))
         }
     }
 

@@ -17,20 +17,24 @@ enum class Status2 {
 
 data class MyResult2<out T>(val status: Status2, val data: T? , val message: String? , val jsonObject: JSONObject?) {
 
-    constructor(status: Status2, data: T?, message: String?) : this(status, data, message,null)
+    constructor(status: Status2) : this(status, null, null,null)
+    constructor(status: Status2,message: String?) : this(status, null, message,null)
+    constructor(status: Status2, data: T?) : this(status, data, null,null)
+    constructor(status: Status2, data: T?,message: String?) : this(status, data, message,null)
     constructor(status: Status2, jsonObject: JSONObject?, message: String?) : this(status, null, message,null)
 
     companion object {
-        fun <T> success(data: T): MyResult2<T> =
-            MyResult2(status = Status2.SUCCESS, data = data, message = null)
+        fun <T> success(data: T?): MyResult2<T> = MyResult2(status = Status2.SUCCESS, data = data)
+        fun <T> success(data: T? , message: String?): MyResult2<T> = MyResult2(status = Status2.SUCCESS, data = data , message)
 
-        fun <T> error(data: T? = null,jsonObject: JSONObject , message: String): MyResult2<T> =
-            MyResult2(status = Status2.ERROR, data = data,jsonObject = jsonObject, message = message)
+        fun <T> error(data: T?,jsonObject: JSONObject , message: String): MyResult2<T> =
+            MyResult2(status = Status2.ERROR,jsonObject = jsonObject, message = message)
 
-        fun <T> error(data: T? , message: String): MyResult2<T> = MyResult2(status = Status2.ERROR, data = data, message = message)
+        fun <T> error(data: T? , message: String): MyResult2<T> =
+            MyResult2(status = Status2.ERROR, data = data, message = message)
 
-        fun <T> loading(data: T?): MyResult2<T> =
-            MyResult2(status = Status2.LOADING, data = data, message = null)
+        fun <T> loading(): MyResult2<T> = MyResult2(status = Status2.LOADING)
+        fun <T> loading(message: String?): MyResult2<T> = MyResult2(status = Status2.LOADING, message = message)
     }
 }
 object Utils {

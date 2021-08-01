@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.RecyclerUtils.AbstractViewBindingHolderAdapter
+import com.example.myfirstapp.Status2
 import com.example.myfirstapp.databinding.ActivityPagingBinding
 import com.example.myfirstapp.databinding.PagingRecycleLayoutBinding
 import com.example.myfirstapp.extra.PaginationScrollListener
@@ -77,9 +78,18 @@ class PagingActivity : AppCompatActivity() {
 
     private fun setObserver() {
         viewModel.getPosts("https://reqres.in/api/users/1").observe(this, { data ->
+            when(data.status){
+                Status2.SUCCESS -> {
+
+                }
+                Status2.ERROR -> {
+
+                }
+                Status2.LOADING -> TODO()
+            }
             Log.e(TAG, "setObserver: " )
 
-            list2.add(data)
+            list2.add(data.data!!)
             generateRecyclerWithHolder.submitList(list2)
 //            generateRecyclerWithHolder.submitList(list2) {
 //                Log.e(TAG, "setObserver: ", )

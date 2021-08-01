@@ -9,6 +9,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Parcelable
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
@@ -29,6 +30,8 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
 import retrofit2.HttpException
+import java.net.SocketException
+import java.net.UnknownHostException
 import kotlin.Exception
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
@@ -230,13 +233,17 @@ fun Exception.toJSONObject(e: Exception): JSONObject? {
     return null
 }
 fun Exception.toJSONString(e: Exception): String? {
-    if (e is HttpException){
-        val response = e.response()
-        response?.let {
-            it.errorBody()?.let { body->
-                return body.charStream().readText()
+    when (e) {
+        is SocketException -> "Bad Internet"
+        is HttpException -> {
+            val response = e.response()
+            response?.let {
+                it.errorBody()?.let { body->
+                    return body.charStream().readText()
+                }
             }
         }
+        is UnknownHostException -> "Connection Error"
     }
     return null
 }
