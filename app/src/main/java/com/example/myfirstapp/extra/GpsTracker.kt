@@ -15,6 +15,7 @@ import android.os.Looper
 import android.provider.Settings
 import android.util.Log
 import com.example.myfirstapp.Myconstants.Companion.TAG
+import com.example.myfirstapp.music.GoogleStep
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -39,7 +40,7 @@ class GpsTracker(context: Context) : Service(), LocationListener {
 
     // Declaring a Location Manager
     private var locationManager: LocationManager? = null
-    private val changedListener: LocationChangedListener
+    lateinit var changedListener: LocationChangedListener
 
 
     companion object {
@@ -58,8 +59,11 @@ class GpsTracker(context: Context) : Service(), LocationListener {
     init {
         Log.e("//", "GpsTracker: ")
         mContext = context
-        changedListener = context as LocationChangedListener
+//        changedListener = context as LocationChangedListener
         getLocation()
+    }
+    fun setLocationCallback(myInt: LocationChangedListener){
+        changedListener = myInt
     }
 
 

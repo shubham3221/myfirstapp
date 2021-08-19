@@ -6,6 +6,7 @@ import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.example.myfirstapp.Myconstants.Companion.TAG
+import com.example.myfirstapp.music.stepMap.StepService
 import org.greenrobot.eventbus.EventBus
 data class JobData(var command:String,var id:Int)
 data class ProgressUpdates(var process:Int)

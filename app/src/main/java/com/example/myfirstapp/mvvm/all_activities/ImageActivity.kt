@@ -40,6 +40,7 @@ class ImageActivity : AppCompatActivity() {
         setContentView(R.layout.activity_image)
         observer = MyLifecycleObserver(activityResultRegistry,this)
         lifecycle.addObserver(observer)
+
 //        startActivity(Intent(this,RoomActivity::class.java))
 
 

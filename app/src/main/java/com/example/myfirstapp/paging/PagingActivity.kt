@@ -6,42 +6,13 @@ import android.util.Log
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myfirstapp.Myconstants.Companion.TAG
-import com.example.myfirstapp.RecyclerUtils.AbstractViewBindingHolderAdapter
+import com.example.myfirstapp.recyclerUtils.AbstractViewBindingHolderAdapter
 import com.example.myfirstapp.Status2
 import com.example.myfirstapp.databinding.ActivityPagingBinding
 import com.example.myfirstapp.databinding.PagingRecycleLayoutBinding
 import com.example.myfirstapp.extra.PaginationScrollListener
 import com.example.myfirstapp.extra.generateRecyclerWithHolder
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Response
 import kotlin.collections.ArrayList
-
-fun <T> CoroutineScope.makeApiCall(apiCall: suspend () -> Response<T>,
-                                   onError: (throwable: Throwable) -> Unit = { _ -> },
-                                   onUnsuccessfulCall: (errorBody: ResponseBody?, responseCode: Int) -> Unit = { _, _ -> },
-                                   onResponse: (response: T?) -> Unit
-): Job {
-
-    return launch(Dispatchers.IO) {
-        try {
-            val response = apiCall()
-            response?.apply {
-                if (isSuccessful) {
-                    onResponse(body())
-                } else {
-                    onUnsuccessfulCall(errorBody(), code())
-                }
-            }
-        } catch (t: Throwable) {
-            onError(t)
-        }
-    }
-}
 
 class PagingActivity : AppCompatActivity() {
     lateinit var binding: ActivityPagingBinding
@@ -62,7 +33,18 @@ class PagingActivity : AppCompatActivity() {
         setupViewmodel()
 //        setupRecyclerview()
         setRecyclerMethod2()
-        setObserver()
+//        setObserver()
+
+        viewModel.getPosts10("http://reqres.in/api/users/1").observe(this){
+            Log.e(TAG, "onCreate: ${it}", )
+            when(it.status){
+                Status2.SUCCESS -> {
+
+                }
+                Status2.ERROR -> TODO()
+                Status2.LOADING -> TODO()
+            }
+        }
 
     }
 

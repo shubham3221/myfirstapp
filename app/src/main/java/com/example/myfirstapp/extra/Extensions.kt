@@ -1,55 +1,30 @@
 package com.example.myfirstapp.extra
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.ActivityManager
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Parcelable
-import android.util.Log
 import android.view.View
-import android.view.WindowManager
-import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
-import android.widget.PopupMenu
 import android.widget.TextView
-import androidx.annotation.ColorInt
-import androidx.annotation.RequiresApi
-import androidx.annotation.UiThread
+import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.edit
-import androidx.recyclerview.widget.GridLayoutManager
-import com.example.myfirstapp.HandleErrorBody
-import com.example.myfirstapp.Modelclass
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import org.json.JSONObject
 import retrofit2.HttpException
 import java.net.SocketException
+import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import kotlin.Exception
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
-
-/**
- * Restarts an activity from itself with a fade animation
- * Keeps its existing extra bundles and has a intentBuilder to accept other parameters
- */
-
-/**
- * Extension method to startActivity with Animation for Context.
- */
-inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0) {
-    val intent = Intent(this, T::class.java)
-    val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
-    ContextCompat.startActivity(this, intent, bundle)
-}
 fun View.toggleVisibility() : View {
     if (visibility == View.VISIBLE) {
         visibility = View.GONE
@@ -221,7 +196,7 @@ inline fun <reified T> SharedPreferences.getList(spListKey: String): ArrayList<T
 
 //Exception function
 
-fun Exception.toJSONObject(e: Exception): JSONObject? {
+fun Exception.findJsonObject(e: Exception): JSONObject? {
     if (e is HttpException){
         val response = e.response()
         response?.let {
@@ -233,9 +208,23 @@ fun Exception.toJSONObject(e: Exception): JSONObject? {
     return null
 }
 
-fun Exception.toJSONString(e: Exception): String? {
+fun Exception.findErrorMessage(e: Exception): String {
     when (e) {
         is SocketException -> "Bad Internet"
+        is SocketTimeoutException -> "timeout"
+        is HttpException -> "Http Error"
+        is UnknownHostException  -> "Connection Error"
+    }
+    e.message?.let {
+        if (e.message!!.contains("CLEARTEXT")){
+            return "Https Required!"
+        }
+    }
+    return "unknown host ${e.message}"
+}
+
+fun Exception.toJSONString(e: Exception): String? {
+    when (e) {
         is HttpException -> {
             val response = e.response()
             response?.let {
@@ -244,24 +233,8 @@ fun Exception.toJSONString(e: Exception): String? {
                 }
             }
         }
-        is UnknownHostException -> "Connection Error"
     }
     return null
-}
-fun Exception.toJSONString2(e: Exception): HandleErrorBody {
-    when (e) {
-        is SocketException -> HandleErrorBody(false,"Bad Internet")
-        is HttpException -> {
-            val response = e.response()
-            response?.let {
-                it.errorBody()?.let { body->
-                    return HandleErrorBody(true,body.charStream().readText())
-                }
-            }
-        }
-        is UnknownHostException -> HandleErrorBody(false,"Connection Error")
-    }
-    return HandleErrorBody(false,null)
 }
 
 interface JSONConvertable {

@@ -12,10 +12,8 @@ import java.io.File
 enum class Status2 {
     SUCCESS,
     ERROR,
-    LOADING
+    LOADING,
 }
-data class HandleErrorBody(val isjson:Boolean = false , val messsage:String?)
-
 data class MyResult2<out T>(val status: Status2, val data: T? , val message: String? , val jsonObject: JSONObject?) {
 
     constructor(status: Status2) : this(status, null, null,null)
@@ -25,13 +23,15 @@ data class MyResult2<out T>(val status: Status2, val data: T? , val message: Str
     constructor(status: Status2, jsonObject: JSONObject?, message: String?) : this(status, null, message,null)
 
     companion object {
-        fun <T> success(data: T?): MyResult2<T> = MyResult2(status = Status2.SUCCESS, data = data)
+        fun <T> success(data: T?): MyResult2<T> {
+            return MyResult2(status = Status2.SUCCESS, data = data)
+        }
+        fun <T> empty(data: T?): MyResult2<T> = MyResult2(status = Status2.ERROR, data = data)
         fun <T> success(data: T? , message: String?): MyResult2<T> = MyResult2(status = Status2.SUCCESS, data = data , message)
 
-        fun <T> error(data: T?,jsonObject: JSONObject , message: String): MyResult2<T> =
-            MyResult2(status = Status2.ERROR,jsonObject = jsonObject, message = message)
+        fun <T> error(data: T?, jsonObject: JSONObject?, message: String): MyResult2<T> = MyResult2(status = Status2.ERROR,jsonObject = jsonObject, message = message)
 
-        fun <T> error(data: T? , message: String): MyResult2<T> =
+        fun <T> error(data: T?, message: String): MyResult2<T> =
             MyResult2(status = Status2.ERROR, data = data, message = message)
 
         fun <T> loading(): MyResult2<T> = MyResult2(status = Status2.LOADING)

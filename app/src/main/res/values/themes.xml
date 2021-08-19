@@ -14,22 +14,35 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+
+        <!-- Base application theme. -->
+        <style name="noactionbar" parent="Theme.AppCompat.Light.NoActionBar">
+            <!-- Customize your theme here. -->
+            <item name="colorPrimary">@color/purple_500</item>
+            <item name="colorPrimaryDark">@color/purple_700</item>
+            <item name="colorAccent">@color/white</item>
+        </style>
+
     <style name="music" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">@color/sheet_background</item>
         <!-- Customize your theme here. -->
+<!--        <item name="android:windowBackground">@android:color/transparent</item>-->
+<!--        <item name="android:windowDisablePreview">true</item>-->
     </style>
 
 
 
     <style name="Widget.MyApp.Toolbar.Solid" parent="Widget.AppCompat.ActionBar">
-        <item name="android:background">@color/sheet_background</item>
+        <item name="android:background">@color/purple_200</item>
         <item name="android:elevation" tools:ignore="NewApi">4dp</item>
         <item name="titleTextAppearance">@color/white</item>
     </style>
 
     <style name="ThemeOverlay.MyApp.ActionBar" parent="ThemeOverlay.AppCompat.ActionBar">
         <!-- Parent theme sets colorControlNormal to textColorPrimary. -->
+        <item name="actionBarItemBackground">?attr/selectableItemBackground</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textSize">20sp</item>
         <item name="subtitleTextAppearance">@color/white</item>
@@ -38,6 +51,11 @@
     <style name="seekbar" parent="Theme.AppCompat.Light">
         <item name="colorControlActivated">#000000</item>
         <item name="colorControlNormal">#00FCFFFC</item>
+    </style>
+
+    <style name="DialogAnimationn">
+        <item name="android:windowEnterAnimation">@anim/popup_show</item>
+        <item name="android:windowExitAnimation">@anim/popup_hide</item>
     </style>
 
 

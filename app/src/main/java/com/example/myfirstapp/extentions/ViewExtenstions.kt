@@ -28,10 +28,32 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.getSystemService
 import androidx.core.view.ViewCompat
+import com.google.android.material.snackbar.Snackbar
 import kotlin.math.max
 import kotlin.math.min
 import com.google.android.material.tabs.TabLayout
 import java.lang.reflect.Field
+
+/**
+ * Show the view if [condition] returns true
+ * (visibility = View.VISIBLE)
+ */
+inline fun View.showIf(condition: () -> Boolean) : View {
+    if (visibility != View.VISIBLE && condition()) {
+        visibility = View.VISIBLE
+    }
+    return this
+}
+
+inline fun View.snack(message: String, length: Int = Snackbar.LENGTH_LONG, f: Snackbar.() -> Unit) {
+    val snack = Snackbar.make(this, message, length)
+    snack.f()
+    snack.show()
+}
+fun Snackbar.action(action: String, color: Int? = null, listener: (View) -> Unit) {
+    setAction(action, listener)
+    color?.let { setActionTextColor(color) }
+}
 
 //toolbar
 fun Toolbar.changeOverflowMenuIconColor(@ColorInt color: Int) {

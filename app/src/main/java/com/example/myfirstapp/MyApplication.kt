@@ -13,6 +13,7 @@ class MyApplication : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        LangChanger.init(this)
         createNotificationChannels()
     }
 
@@ -29,7 +30,7 @@ class MyApplication : Application() {
             ).apply {
                 setShowBadge(false)
             }
-            channel1.description = "Progress Notification Channel"
+            channel1.description = Myconstants.CHANNAL_DESC
             val manager = getSystemService(
                 NotificationManager::class.java
             )

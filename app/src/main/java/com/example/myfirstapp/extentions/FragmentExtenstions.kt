@@ -18,6 +18,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.setFragmentResultListener
 import androidx.lifecycle.coroutineScope
 
+
 /**
  * Set arguments to fragment and return current instance
  */

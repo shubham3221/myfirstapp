@@ -4,6 +4,9 @@ import android.animation.Animator
 import android.animation.IntEvaluator
 import android.animation.ObjectAnimator
 import android.animation.ValueAnimator
+import android.app.Activity
+import android.content.Context
+import android.content.Intent
 import android.graphics.LinearGradient
 import android.graphics.Rect
 import android.graphics.Shader
@@ -15,12 +18,21 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.ScaleAnimation
+import android.view.animation.TranslateAnimation
 import android.widget.RelativeLayout
+import androidx.core.app.ActivityOptionsCompat
+import androidx.core.content.ContextCompat
 
 
-
-
-
+/**
+ * Extension method to startActivity with Animation for Context.
+ */
+inline fun <reified T : Activity> Context.startActivityWithAnimation(enterResId: Int = 0, exitResId: Int = 0) {
+    val intent = Intent(this, T::class.java)
+    val bundle = ActivityOptionsCompat.makeCustomAnimation(this, enterResId, exitResId).toBundle()
+    ContextCompat.startActivity(this, intent, bundle)
+}
 
 @JvmOverloads
 fun toggleArrow(show: Boolean, view: View, delay: Boolean = true): Boolean {
@@ -41,6 +53,37 @@ fun View.toggleArrow(duration: Long = 200): Boolean {
         animate().setDuration(duration).rotation(0f)
         false
     }
+}
+fun View.slideUp(){
+    visibility = View.VISIBLE
+    val animate = TranslateAnimation(
+            0f,  // fromXDelta
+            0f,  // toXDelta
+            height.toFloat(),  // fromYDelta
+            0f) // toYDelta
+    animate.duration = 500
+    animate.fillAfter = true
+    startAnimation(animate)
+}
+fun View.slideUpScaleAnimation(){
+    visibility = View.VISIBLE
+    val animate = ScaleAnimation(
+            1f,  // fromXDelta
+            1f,  // toXDelta
+            0f,  // fromYDelta
+            1f) // toYDelta
+    animate.duration = 500
+    startAnimation(animate)
+}
+fun View.slideDown(){
+    val animate = TranslateAnimation(
+            0f,  // fromXDelta
+            0f,  // toXDelta
+            0f,  // fromYDelta
+            height.toFloat()) // toYDelta
+    animate.duration = 500
+    animate.fillAfter = true
+    startAnimation(animate)
 }
 /**
  * gradient(200f, 0x80C24641.toInt(), 0x80FFFFFF.toInt())

@@ -1,12 +1,8 @@
 package com.example.myfirstapp.paging
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewbinding.ViewBinding
-import com.example.myfirstapp.Myconstants.Companion.TAG
-import com.example.myfirstapp.RecyclerUtils.AbstractViewBindingCleanAdapter
 import com.example.myfirstapp.databinding.PagingRecycleLayoutBinding
 
 class PagingRecycleAdapter(var list: ArrayList<PagingDataClass>) : RecyclerView.Adapter<PagingRecycleAdapter.MyPagingViewHolder>() {

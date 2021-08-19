@@ -5,6 +5,7 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.media.AudioAttributes
 import android.net.Uri
@@ -12,35 +13,38 @@ import android.os.Build
 import androidx.annotation.IdRes
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.myfirstapp.Myconstants
+import com.example.myfirstapp.R
+
 
 class NotificationsUtil(private val context: Context,
-                        private val channelName: String = "gi",
-                        private val channelID: String,
-                        private val channelDescription: String = "",
-                        private val enableCustomSound: Boolean = false,
+                        private val channelName: String = Myconstants.CHANNAL_NAME,
+                        private val channelID: String=Myconstants.CHANNAL_ID,
+                        private val channelDescription: String = Myconstants.CHANNAL_DESC,
+                        private val sound: Boolean = false,
                         @IdRes rawNotificationSound: Int = -1) {
 
 
-    private var notificationCompatBuilder: NotificationCompat.Builder? = null
-    private var notificationManagerCompat: NotificationManagerCompat? = null
+    private var builder: NotificationCompat.Builder? = null
+    var managerCompat: NotificationManagerCompat? = null
     private var soundUri: Uri? = null
 
     init {
-        if (enableCustomSound) {
+        if (sound) {
             soundUri = Uri.parse("android.resource://" + context.packageName + "/" + rawNotificationSound)
         }
     }
 
 
-    fun createNotification(id: String, message: String, title: String, @IdRes notificationDrawable: Int): Notification? {
-        notificationCompatBuilder = NotificationCompat.Builder(context, createNotificationChannel())
-        notificationManagerCompat = NotificationManagerCompat.from(context)
+    fun createNotification(id: String, message: String, title: String): Notification? {
+        builder = NotificationCompat.Builder(context, createNotificationChannel())
+        managerCompat = NotificationManagerCompat.from(context)
 
         // val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        notificationCompatBuilder
+        builder
             ?.setDefaults(Notification.DEFAULT_LIGHTS)
-            ?.setSmallIcon(notificationDrawable)
+            ?.setSmallIcon(R.drawable.ic_launcher_foreground)
             ?.setContentTitle(title)?.setContentText(message)
             ?.setPriority(NotificationCompat.PRIORITY_HIGH)
             ?.setAutoCancel(true)
@@ -49,78 +53,58 @@ class NotificationsUtil(private val context: Context,
             ?.setOnlyAlertOnce(true)
 
         //   ?.setContentIntent(pendingIntent)
-        if (enableCustomSound) {
-            notificationCompatBuilder?.setSound(soundUri)
+        if (sound) {
+            builder?.setSound(soundUri)
         }
 
-        val notification = notificationCompatBuilder?.build()
+        val notification = builder?.build()
 
-        notification?.let { notificationManagerCompat?.notify(id.toInt(), it) }
+        notification?.let { managerCompat?.notify(id.toInt(), it) }
 
         return notification
 
 
     }
 
-
-    fun buildNotification(message: String, title: String, @IdRes notificationDrawable: Int): Notification? {
-        notificationCompatBuilder = NotificationCompat.Builder(context, createNotificationChannel())
-        notificationManagerCompat = NotificationManagerCompat.from(context)
+    fun buildNotificationWithService(message: String, title: String, clazz: Class<*>): Notification? {
+        builder = NotificationCompat.Builder(context, Myconstants.CHANNAL_ID)
+        managerCompat = NotificationManagerCompat.from(context)
 
         // val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
-        notificationCompatBuilder
+        builder
             ?.setDefaults(Notification.DEFAULT_LIGHTS)
-            ?.setSmallIcon(notificationDrawable)
+            ?.setSmallIcon(R.mipmap.ic_launcher)
             ?.setContentTitle(title)?.setContentText(message)
             ?.setPriority(NotificationCompat.PRIORITY_HIGH)
             ?.setAutoCancel(true)
             ?.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
             ?.setColorized(true)
             ?.setOnlyAlertOnce(true)
+
 
         //   ?.setContentIntent(pendingIntent)
-        if (enableCustomSound) {
-            notificationCompatBuilder?.setSound(soundUri)
+        if (sound) {
+            builder?.setSound(soundUri)
+        }
+        Intent(context, clazz).apply {
+            this.action = Myconstants.STOP_SERVICE
+            val broadcast = PendingIntent.getService(context,
+                    3221,
+                    this,
+                    PendingIntent.FLAG_UPDATE_CURRENT)
+            builder!!.addAction(R.mipmap.ic_launcher, "Stop Service", broadcast)
         }
 
-        return notificationCompatBuilder?.build()
+        return builder?.build()
     }
 
-    fun createNotificationWithPendingIntent(id: String, message: String, title: String, @IdRes notificationDrawable: Int, pendingIntent: PendingIntent): Notification? {
-        notificationCompatBuilder = NotificationCompat.Builder(context, createNotificationChannel())
-        notificationManagerCompat = NotificationManagerCompat.from(context)
-
-        /* val pendingIntent = PendingIntent.getActivity(context, 0, mainIntent, PendingIntent.FLAG_UPDATE_CURRENT)*/
-
-        notificationCompatBuilder
-            ?.setDefaults(Notification.DEFAULT_LIGHTS)
-            ?.setSmallIcon(notificationDrawable)
-            ?.setContentTitle(title)?.setContentText(message)
-            ?.setPriority(NotificationCompat.PRIORITY_HIGH)
-            ?.setAutoCancel(true)
-            ?.setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-            ?.setColorized(true)
-            ?.setOnlyAlertOnce(true)
-            ?.setContentIntent(pendingIntent)
-
-        if (enableCustomSound) {
-            notificationCompatBuilder?.setSound(soundUri)
-        }
-
-        val notification = notificationCompatBuilder?.build()
-
-        notification?.let { notificationManagerCompat?.notify(id.toInt(), it) }
-
-        return notification
-
-    }
 
     fun createExpandableNotification(id: String, message: String, title: String, @IdRes notificationDrawable: Int): Notification? {
-        notificationCompatBuilder = NotificationCompat.Builder(context, createNotificationChannel())
-        notificationManagerCompat = NotificationManagerCompat.from(context)
+        builder = NotificationCompat.Builder(context, createNotificationChannel())
+        managerCompat = NotificationManagerCompat.from(context)
 
-        notificationCompatBuilder?.setSmallIcon(notificationDrawable)
+        builder?.setSmallIcon(notificationDrawable)
             ?.setContentTitle(title)
             ?.setContentText(message)
             ?.setDefaults(Notification.DEFAULT_LIGHTS)
@@ -131,23 +115,23 @@ class NotificationsUtil(private val context: Context,
             ?.setStyle(NotificationCompat.BigTextStyle().bigText(message))
             ?.setOnlyAlertOnce(true)
 
-        if (enableCustomSound) {
-            notificationCompatBuilder?.setSound(soundUri)
+        if (sound) {
+            builder?.setSound(soundUri)
         }
 
-        val notification = notificationCompatBuilder?.build()
+        val notification = builder?.build()
 
-        notification?.let { notificationManagerCompat?.notify(id.toInt(), it) }
+        notification?.let { managerCompat?.notify(id.toInt(), it) }
 
         return notification
 
     }
 
     fun createExpandableNotificationWithPendingIntent(id: String, message: String, title: String, @IdRes notificationDrawable: Int, pendingIntent: PendingIntent): Notification? {
-        notificationCompatBuilder = NotificationCompat.Builder(context, createNotificationChannel())
-        notificationManagerCompat = NotificationManagerCompat.from(context)
+        builder = NotificationCompat.Builder(context, createNotificationChannel())
+        managerCompat = NotificationManagerCompat.from(context)
 
-        notificationCompatBuilder?.setSmallIcon(notificationDrawable)
+        builder?.setSmallIcon(notificationDrawable)
             ?.setContentTitle(title)
             ?.setContentText(message)
             ?.setDefaults(Notification.DEFAULT_LIGHTS)
@@ -159,13 +143,13 @@ class NotificationsUtil(private val context: Context,
             ?.setOnlyAlertOnce(true)
             ?.setContentIntent(pendingIntent)
 
-        if (enableCustomSound) {
-            notificationCompatBuilder?.setSound(soundUri)
+        if (sound) {
+            builder?.setSound(soundUri)
         }
 
-        val notification = notificationCompatBuilder?.build()
+        val notification = builder?.build()
 
-        notification?.let { notificationManagerCompat?.notify(id.toInt(), it) }
+        notification?.let { managerCompat?.notify(id.toInt(), it) }
 
         return notification
 
@@ -184,7 +168,7 @@ class NotificationsUtil(private val context: Context,
                 .build()
 
             val notificationChannel = NotificationChannel(channelID, name, NotificationManager.IMPORTANCE_HIGH)
-            if (enableCustomSound) {
+            if (sound) {
                 notificationChannel.setSound(soundUri, audioAttributes)
             }
             notificationChannel.description = description

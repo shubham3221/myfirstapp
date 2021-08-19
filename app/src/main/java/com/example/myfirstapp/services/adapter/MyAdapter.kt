@@ -23,9 +23,9 @@ class MyAdapter(private val items: ArrayList<Pojo>) : RecyclerView.Adapter<MyAda
 
     inner class ViewHolder(val binding: FragmentLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Pojo) {
-            binding.name = item.name
-            binding.number = item.number
-            binding.executePendingBindings()
+//            binding.name = item.name
+//            binding.number = item.number
+//            binding.executePendingBindings()
         }
     }
 

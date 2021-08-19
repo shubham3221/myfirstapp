@@ -17,6 +17,10 @@
     <string name="all_songs">All Songs</string>
     <string name="time">Time: %1$s</string>
     <string name="speed">Average speed: %1$d steps/min</string>
+    <string name="speedinkm">Average speed: %1$d km/hour</string>
     <string name="distance">Distance: %1$s m</string>
+
+    <string name="nav_open">Open</string>
+    <string name="nav_close">Close</string>
 
 </resources>

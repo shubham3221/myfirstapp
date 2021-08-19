@@ -22,17 +22,6 @@ enum class PermissionResult{
     SUCCESS,FAILED
 }
 
-class LocationSettingsContract : ActivityResultContract<Nothing, Nothing>() {
-
-    override fun createIntent(context: Context, input: Nothing?): Intent {
-        return Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS)
-    }
-
-    override fun parseResult(resultCode: Int, intent: Intent?): Nothing? {
-        return null
-    }
-}
-
 inline fun FragmentActivity.askForSinglePermissionWithResult(crossinline onPermissionsGranted: (Boolean) -> Unit = {}) =
     registerForActivityResult(ActivityResultContracts.RequestPermission()) {
         if (it) {
@@ -93,81 +82,6 @@ inline fun FragmentActivity.askForSinglePermission(crossinline onDenied: () -> U
     }
 //endregion
 
-//region GPS
-var enableLocationRetryCount = 1
-inline fun Fragment.enableGPS(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) = registerForActivityResult(
-    LocationSettingsContract()
-) {
-    if (enableLocationRetryCount <= 2) {
-        onLocationGranted()
-        enableLocationRetryCount++
-    } else {
-        onDenied()
-        enableLocationRetryCount = 1
-    }
-}
-
-inline fun FragmentActivity.enableGPS(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) = registerForActivityResult(
-    LocationSettingsContract()
-) {
-    if (enableLocationRetryCount <= 2) {
-        onLocationGranted()
-        enableLocationRetryCount++
-    } else {
-        onDenied()
-        enableLocationRetryCount = 1
-    }
-}
-//endregion
-
-
-//region Foreground location
-inline fun Fragment.getForegroundLocationPermission(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) =
-    askForMultiplePermissions(onDenied, onLocationGranted).launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
-
-inline fun FragmentActivity.getForegroundLocationPermission(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) =
-    askForMultiplePermissions(onDenied, onLocationGranted).launch(arrayOf(ACCESS_FINE_LOCATION, ACCESS_COARSE_LOCATION))
-//endregion
-
-
-//region Background location
-inline fun Fragment.getBackgroundLocationPermission(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) =
-    when {
-        Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> {
-            askForSinglePermission(onDenied, onLocationGranted).launch(ACCESS_BACKGROUND_LOCATION)
-        }
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> {
-            getForegroundLocationPermission(onDenied, onLocationGranted)
-        }
-        Build.VERSION.SDK_INT == Build.VERSION_CODES.R -> {
-            getForegroundLocationPermission(onDenied) {
-                askForSinglePermission(onDenied, onLocationGranted).launch(ACCESS_BACKGROUND_LOCATION)
-            }
-        }
-        else -> {
-
-        }
-    }
-
-
-inline fun FragmentActivity.getBackgroundLocationPermission(crossinline onDenied: () -> Unit = {}, crossinline onLocationGranted: () -> Unit = {}) =
-    when {
-        Build.VERSION.SDK_INT == Build.VERSION_CODES.Q -> {
-            askForSinglePermission(onDenied, onLocationGranted).launch(ACCESS_BACKGROUND_LOCATION)
-        }
-        Build.VERSION.SDK_INT < Build.VERSION_CODES.Q -> {
-            getForegroundLocationPermission(onDenied, onLocationGranted)
-        }
-        Build.VERSION.SDK_INT == Build.VERSION_CODES.R -> {
-            getForegroundLocationPermission(onDenied) {
-                askForSinglePermission(onDenied, onLocationGranted).launch(ACCESS_BACKGROUND_LOCATION)
-            }
-        }
-        else -> {
-
-        }
-    }
-//endregion
 
 //region camera permission
 inline fun Fragment.getCameraPermission(crossinline onDenied: () -> Unit = {}, crossinline onGranted: () -> Unit = {}) =
@@ -181,20 +95,4 @@ inline fun FragmentActivity.getCameraPermission(crossinline onDenied: () -> Unit
 class AccessibilityContract : ActivityResultContract<Nothing, Nothing>() {
     override fun createIntent(context: Context, input: Nothing?): Intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
     override fun parseResult(resultCode: Int, intent: Intent?): Nothing? = null
-}
-
-
-//call it as tryOrIgnore { registerDocumentContract.launch(videoName.mp4) }
-//it's wrapped in try or ignore in case no app can handle the intent
-//*/
-class CreateVideoContract(private val videoType :String = "video/*") : ActivityResultContract<String?, Uri?>() {
-    override fun createIntent(context: Context, input: String?): Intent {
-        return Intent(Intent.ACTION_CREATE_DOCUMENT)
-            .setType(videoType)
-            .putExtra(Intent.EXTRA_TITLE, input)
-    }
-    override fun getSynchronousResult(context: Context, input: String?) = null
-    override fun parseResult(resultCode: Int, intent: Intent?): Uri? {
-        return if (intent == null || resultCode != Activity.RESULT_OK) null else intent.data
-    }
 }

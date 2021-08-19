@@ -19,7 +19,7 @@ class Demoactivity : AppCompatActivity() {
         setContentView(R.layout.demo_layout_mainactivity)
 
         button.setOnClickListener {
-            startActivity(Intent(this,Lastscreen::class.java))
+
         }
         abc(object :MyCallback{
             override fun onClick() {

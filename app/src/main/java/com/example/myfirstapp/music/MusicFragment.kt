@@ -14,7 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import com.example.myfirstapp.Modelclass
 import com.example.myfirstapp.Myconstants
 import com.example.myfirstapp.R
-import com.example.myfirstapp.RecyclerUtils.withLinearAdapter
+import com.example.myfirstapp.recyclerUtils.withLinearAdapter
 import com.example.myfirstapp.databinding.FragmentMusicBinding
 import com.example.myfirstapp.extra.isMyServiceRunning
 import com.example.myfirstapp.extra.toggleVisibility

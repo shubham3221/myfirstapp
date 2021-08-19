@@ -11,8 +11,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
-import com.example.myfirstapp.RecyclerUtils.AbstractViewBindingHolderAdapter
-import com.example.myfirstapp.RecyclerUtils.orientation
+import com.example.myfirstapp.recyclerUtils.AbstractViewBindingHolderAdapter
+import com.example.myfirstapp.recyclerUtils.orientation
 inline fun <reified T, VB : ViewBinding> generateRecyclerWithHolder(
     noinline bindingInflater: (LayoutInflater, ViewGroup, Boolean) -> VB,
     noinline areItemsTheSameCallback: (old: T, new: T) -> Boolean? = { _, _ -> null },

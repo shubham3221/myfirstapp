@@ -13,27 +13,43 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
 
     <application
         android:name=".MyApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:requestLegacyExternalStorage="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
-        <activity android:name=".workmanager.WorkActivity"></activity>
-        <activity
-            android:name=".music.MusicActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/music">
+        <activity android:name=".camera.CamActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".camera.CameraActivity">
+
+        </activity>
+
+        <service
+            android:name=".music.stepMap.StepService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="location" />
+
+        <activity android:name=".workmanager.WorkActivity" />
+        <activity android:name=".camera.demo.PicturePreviewActivity" />
+        <activity android:name=".camera.demo.VideoPreviewActivity" />
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
+        <activity
+            android:name=".music.MusicActivity"
+            android:screenOrientation="sensor"
+            android:theme="@style/music"></activity>
         <activity android:name=".animation.AnimationActivity" />
         <activity android:name=".testing.TestingActivity" />
 
@@ -93,15 +109,18 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".notifications.NotificationActivity" /> <!-- <provider -->
-        <!-- android:name="androidx.core.content.FileProvider" -->
-        <!-- android:authorities="${applicationId}.provider" -->
-        <!-- android:exported="false" -->
-        <!-- android:grantUriPermissions="true"> -->
-        <!-- <meta-data -->
-        <!-- android:name="android.support.FILE_PROVIDER_PATHS" -->
-        <!-- android:resource="@xml/provider_paths" /> -->
-        <!-- </provider> -->
+        <activity android:name=".notifications.NotificationActivity" />
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.provider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
+
         <activity android:name=".googlesdk.GoogleActivity" />
         <activity android:name=".twitterLogin.TwitterActivity" />
         <activity android:name=".pininterestSdk.PininterestActivity">
@@ -133,7 +152,7 @@
         <activity
             android:name=".mvvm.all_activities.ImageActivity"
             android:screenOrientation="sensor" />
-        <activity android:name=".GoogleMaps.MapsActivity"></activity>
+        <activity android:name=".googleMaps.MapsActivity" />
     </application>
 
 </manifest>

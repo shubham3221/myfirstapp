@@ -7,6 +7,7 @@ import android.net.Uri
 import android.provider.Settings
 import android.util.Log
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.example.myfirstapp.Myconstants
 import com.example.myfirstapp.R
 import com.google.android.material.snackbar.Snackbar
@@ -34,6 +35,24 @@ object BasicHelper {
             permissionDenied(true)
         } else {
             val snackbar = Snackbar.make(activity.findViewById(R.id.root),
+                "permission needs",
+                Snackbar.LENGTH_INDEFINITE)
+            snackbar.setAction("settings") {
+                val intent = Intent()
+                intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+                val uri: Uri = Uri.fromParts("package", activity.packageName, null)
+                intent.data = uri
+                activity.startActivity(intent)
+            }
+            snackbar.show()
+            permissionDenied(false)
+        }
+    }
+    fun showDialogPermissionFragment(activity: Context,pendingPermission: String,rootView:Fragment ,permissionDenied:(Boolean)->Unit) {
+        if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, pendingPermission)) {
+            permissionDenied(true)
+        } else {
+            val snackbar = Snackbar.make(rootView.requireView().findViewById(R.id.fragmentRoot),
                 "permission needs",
                 Snackbar.LENGTH_INDEFINITE)
             snackbar.setAction("settings") {
