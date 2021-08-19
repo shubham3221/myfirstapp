@@ -127,6 +127,7 @@ class GoogleActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION))
         }
 
+
         //image
         val imagesCallback =
             registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
