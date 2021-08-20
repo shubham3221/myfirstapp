@@ -19,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import java.lang.Exception
 import java.util.*
 import android.os.*
+import androidx.lifecycle.lifecycleScope
 
 import com.example.myfirstapp.Myconstants.Companion.TAG
 import com.example.myfirstapp.googleMaps.MyLocationProvider
@@ -28,6 +29,8 @@ import com.example.myfirstapp.googleMaps.helper.MapsHelperUber
 import com.google.android.gms.maps.model.*
 import com.google.maps.android.SphericalUtil
 import kotlinx.android.synthetic.main.google_step_fragment.*
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,LocationListener{
     private var started: Boolean = false

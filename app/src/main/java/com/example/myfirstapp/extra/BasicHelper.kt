@@ -4,6 +4,8 @@ import android.app.Activity
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
@@ -76,10 +78,7 @@ object BasicHelper {
     }
 
     private fun showDialog(context: Context) {
-        val dialog = Dialog(context)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.window?.attributes?.windowAnimations = R.style.PauseDialog
-        dialog.setCancelable(false)
+        val dialog = Dialog(context, R.style.jz_style_dialog_progress)
         dialog.setContentView(R.layout.custom_layout)
         val yes = dialog.findViewById(R.id.button6) as Button
         val no = dialog.findViewById(R.id.button5) as Button

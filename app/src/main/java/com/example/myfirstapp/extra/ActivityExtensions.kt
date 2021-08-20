@@ -291,23 +291,6 @@ inline fun Activity.restart(intentBuilder: Intent.() -> Unit = {}) {
     finish()
 }
 
-/**
- * Force restart an entire application
- */
-@RequiresApi(Build.VERSION_CODES.M)
-fun Activity.restartApplication() {
-    val intent = packageManager.getLaunchIntentForPackage(packageName)
-    intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
-    val pending = PendingIntent.getActivity(this, 666, intent, PendingIntent.FLAG_CANCEL_CURRENT)
-    val alarm = getSystemService(Context.ALARM_SERVICE) as AlarmManager
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
-        alarm.setExactAndAllowWhileIdle(AlarmManager.RTC, System.currentTimeMillis() + 100, pending)
-    else
-        alarm.setExact(AlarmManager.RTC, System.currentTimeMillis() + 100, pending)
-    finish()
-    System.exit(0)
-}
-
 
 inline fun <reified T> Activity.startActivityForResult(
     requestCode: Int,
@@ -463,11 +446,7 @@ fun AppCompatActivity.popWholeBackStack() {
     }
 }
 
-fun Activity.getBitmapFromUri(uri: Uri): Bitmap? {
-    return contentResolver.openInputStream(uri)?.use {
-        return@use BitmapFactory.decodeStream(it)
-    }
-}
+
 
 fun Activity.makeSceneTransitionAnimation(
     view: View,

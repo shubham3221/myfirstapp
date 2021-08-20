@@ -39,12 +39,19 @@ class PagingActivity : AppCompatActivity() {
             Log.e(TAG, "onCreate: ${it}", )
             when(it.status){
                 Status2.SUCCESS -> {
+                }
+                Status2.ERROR -> {
 
                 }
-                Status2.ERROR -> TODO()
-                Status2.LOADING -> TODO()
+                Status2.LOADING -> {
+
+                }
+                Status2.UNSUCCESSFUL -> {
+
+                }
             }
         }
+
 
     }
 
@@ -67,7 +74,9 @@ class PagingActivity : AppCompatActivity() {
                 Status2.ERROR -> {
 
                 }
-                Status2.LOADING -> TODO()
+                Status2.LOADING -> {
+
+                }
             }
             Log.e(TAG, "setObserver: " )
 

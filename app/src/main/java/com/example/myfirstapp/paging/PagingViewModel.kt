@@ -4,7 +4,6 @@ import android.util.Log
 import androidx.lifecycle.*
 import com.example.myfirstapp.MyResult2
 import com.example.myfirstapp.Myconstants.Companion.TAG
-import com.example.myfirstapp.extentions.subscribeApiCallList
 import com.example.myfirstapp.extentions.makeApiCall
 import com.example.myfirstapp.extra.findErrorMessage
 import com.example.myfirstapp.extra.findJsonObject
@@ -16,7 +15,6 @@ class PagingViewModel(val apiService: PagingService) :ViewModel() {
     var list = MutableLiveData<MyResult2<PagingDataClass>>()
 
     fun getPosts(url:String) = liveData(Dispatchers.IO) {
-        emit(MyResult2.loading())
         try {
             emit(MyResult2.success(apiService.getUser(url)))
         }catch (e:Exception){
@@ -24,17 +22,6 @@ class PagingViewModel(val apiService: PagingService) :ViewModel() {
         }
     }
 
-    fun getPosts9(url:String) = liveData {
-        subscribeApiCallList(apiService.getUser4(url))
-
-    }
-    fun <T> tryOrDefault(defaultValue: T, f: () -> T): T {
-        return try {
-            f()
-        } catch (e: Exception) {
-            defaultValue
-        }
-    }
     fun getPosts10(url:String) = liveData<MyResult2<PagingDataClass>> {
         try {
             makeApiCall(apiService.getUser4(url))

@@ -12,7 +12,7 @@ import java.io.File
 enum class Status2 {
     SUCCESS,
     ERROR,
-    LOADING,
+    UNSUCCESSFUL,
 }
 data class MyResult2<out T>(val status: Status2, val data: T? , val message: String? , val jsonObject: JSONObject?) {
 
@@ -26,16 +26,22 @@ data class MyResult2<out T>(val status: Status2, val data: T? , val message: Str
         fun <T> success(data: T?): MyResult2<T> {
             return MyResult2(status = Status2.SUCCESS, data = data)
         }
+        fun <T> unsuccess(data: T?): MyResult2<T> {
+            return MyResult2(status = Status2.UNSUCCESSFUL, data = data)
+        }
+        fun <T> unsuccess(data: T?, jsonObject: JSONObject?, message: String?): MyResult2<T>
+        = MyResult2(status = Status2.UNSUCCESSFUL,jsonObject = jsonObject, message = message, data = data)
+
+
+
         fun <T> empty(data: T?): MyResult2<T> = MyResult2(status = Status2.ERROR, data = data)
         fun <T> success(data: T? , message: String?): MyResult2<T> = MyResult2(status = Status2.SUCCESS, data = data , message)
 
-        fun <T> error(data: T?, jsonObject: JSONObject?, message: String): MyResult2<T> = MyResult2(status = Status2.ERROR,jsonObject = jsonObject, message = message)
+        fun <T> error(data: T?, jsonObject: JSONObject?, message: String?): MyResult2<T> = MyResult2(status = Status2.ERROR,jsonObject = jsonObject, message = message)
 
-        fun <T> error(data: T?, message: String): MyResult2<T> =
+        fun <T> error(data: T?, message: String?): MyResult2<T> =
             MyResult2(status = Status2.ERROR, data = data, message = message)
 
-        fun <T> loading(): MyResult2<T> = MyResult2(status = Status2.LOADING)
-        fun <T> loading(message: String?): MyResult2<T> = MyResult2(status = Status2.LOADING, message = message)
     }
 }
 object Utils {

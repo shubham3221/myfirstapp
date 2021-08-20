@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="PauseDialog" parent="@android:style/Theme.Dialog">
+        <item name="android:windowAnimationStyle">@style/PauseDialogAnimation</item>
+    </style>
+
+    <style name="PauseDialogAnimation">
+        <item name="android:windowEnterAnimation">@android:anim/slide_in_left</item>
+        <item name="android:windowExitAnimation">@android:anim/slide_out_right</item>
+    </style>
+
+
+    <style parent="@android:style/Theme.Dialog" name="jz_style_dialog_progress">
+        <item name="android:windowBackground">@android:color/transparent</item>
+
+        <item name="android:windowNoTitle">true</item>
+
+        <item name="android:windowAnimationStyle">@style/myanimation</item>
+
+        <item name="android:backgroundDimEnabled">true</item>
+    </style>
+        <style name="myanimation">
+
+            <item name="android:windowEnterAnimation">@anim/fragment_open_enter</item>
+
+            <item name="android:windowExitAnimation">@anim/fragment_open_exit</item>
+
+        </style>
+
+</resources>
