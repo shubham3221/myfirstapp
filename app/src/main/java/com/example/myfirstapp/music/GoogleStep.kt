@@ -25,7 +25,6 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 
-
 class GoogleStep() :Fragment(), OnMapReadyCallback , LocationChangedListener {
     private lateinit var mMap: GoogleMap
     lateinit var binder : GoogleStepFragmentBinding

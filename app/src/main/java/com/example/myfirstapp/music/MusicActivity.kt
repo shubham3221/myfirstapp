@@ -9,7 +9,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.*
 import android.widget.*
 import androidx.annotation.RequiresApi
@@ -52,7 +51,8 @@ class MusicActivity : AppCompatActivity() {
 
     private fun initViewPager() {
         val adapter = ViewPagerAdapter(supportFragmentManager)
-        adapter.addFragment(GoogleStep2(), "Home")
+//        adapter.addFragment(GoogleStep2(), "Home")
+        adapter.addFragment(GoogleStepTest(), "Home")
         adapter.addFragment(MusicFragment(), "About Us")
         adapter.addFragment(GoogleStep(), "Contact Us")
         viewpager.adapter = adapter

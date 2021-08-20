@@ -26,11 +26,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
         <activity android:name=".camera.CamActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".camera.CameraActivity">
 
@@ -49,7 +45,13 @@
         <activity
             android:name=".music.MusicActivity"
             android:screenOrientation="sensor"
-            android:theme="@style/music"></activity>
+            android:theme="@style/music">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".animation.AnimationActivity" />
         <activity android:name=".testing.TestingActivity" />
 
@@ -147,12 +149,13 @@
         </activity>
         <activity android:name=".SplashScreen" />
         <activity android:name=".Demoactivity" />
-        <activity android:name=".Lastscreen" />
         <activity android:name=".MainActivity" />
         <activity
             android:name=".mvvm.all_activities.ImageActivity"
             android:screenOrientation="sensor" />
-        <activity android:name=".googleMaps.MapsActivity" />
+        <activity android:name=".googleMaps.MapsActivity" >
+
+        </activity>
     </application>
 
 </manifest>

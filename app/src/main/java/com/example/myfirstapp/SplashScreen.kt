@@ -66,7 +66,7 @@ class SplashScreen : AppCompatActivity() {
 
         login.setOnClickListener{
             if (mSharedprefrences.getBoolean("isopen",false)){
-                startActivity(Intent(this,Lastscreen::class.java))
+//                startActivity(Intent(this,Lastscreen::class.java))
             }else{
                 mSharedprefrences.edit().putBoolean("isopen",true).apply()
                 startActivity(Intent(this,Demoactivity::class.java))

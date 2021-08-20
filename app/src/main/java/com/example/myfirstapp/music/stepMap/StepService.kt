@@ -224,8 +224,8 @@ class StepService : LifecycleService(), LocationListener {
     }
 
     companion object {
-        private const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 2 // 10 meters
-        private const val MIN_TIME_BW_UPDATES = (2000).toLong()
+        const val MIN_DISTANCE_CHANGE_FOR_UPDATES: Long = 2 // 10 meters
+        const val MIN_TIME_BW_UPDATES = (2000).toLong()
     }
 
 }
