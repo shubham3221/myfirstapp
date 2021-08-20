@@ -1,5 +1,6 @@
 package com.example.myfirstapp.music
 
+import android.R.attr
 import android.animation.AnimatorSet
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
@@ -7,9 +8,6 @@ import android.annotation.SuppressLint
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
-import android.os.Build
-import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.view.animation.LinearInterpolator
@@ -35,8 +33,17 @@ import java.lang.Exception
 import java.lang.Float.isNaN
 import java.util.*
 import java.util.concurrent.TimeUnit
+import android.R.attr.angle
+import android.os.*
+
+import com.google.android.gms.maps.model.LatLng
+import android.view.animation.AccelerateDecelerateInterpolator
+import android.view.animation.Interpolator
+import com.example.myfirstapp.Myconstants.Companion.TAG
 
 class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,LocationListener{
+    private var count: Int = 0
+    private var mapTouched: Boolean = false
     private var mMap: GoogleMap? = null
 
     private var marker: Marker? = null
@@ -50,13 +57,14 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         MapsSetupFramgent(this).initMap()
-
     }
 
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
-        getLocation {
-            Log.e("//", "ready to go: ")
+        getLocation()
+
+        mMap!!.setOnMapClickListener {
+            mapTouched = true
         }
     }
     override fun onLocationChanged(location: Location) {
@@ -68,8 +76,9 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
         )
         SendNextPoints()
     }
+
     @SuppressLint("MissingPermission")
-    fun getLocation(isSuccess: (Boolean) -> Unit) {
+    fun getLocation() {
         try {
             locationManager = requireActivity().getSystemService(LifecycleService.LOCATION_SERVICE) as LocationManager
             locationManager!!.requestLocationUpdates(
@@ -84,11 +93,9 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
         }
     }
 
-
-
-
     private fun SendNextPoints() {
         if (!animatorSet.isRunning && !points.isEmpty()) UpdateMarker(points.poll()!!) // taking the points f rom head of the queue.
+        Log.e(TAG, "SendNextPoints: ${points.size}", )
     }
 
     private fun UpdateMarker(newlatlng: LatLng) {
@@ -98,18 +105,23 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
             animatorSet = AnimatorSet()
             animatorSet.playTogether(
                 rotateMarker(
-                    ((if (isNaN(bearingangle)) -1F else bearingangle) as Float),
+                    ((if (isNaN(bearingangle)) -1F else bearingangle)),
                     marker!!.rotation
-                ), moveVechile(newlatlng, marker!!.getPosition())
+                ), moveVechile(newlatlng, marker!!.position)
             )
             animatorSet.start()
         } else AddMarker(newlatlng)
-        mMap!!.animateCamera(
-            CameraUpdateFactory.newCameraPosition(
-                CameraPosition.Builder().target(newlatlng)
-                    .zoom(16f).build()
+        count =0
+
+        if (!mapTouched){
+            mMap!!.animateCamera(
+                CameraUpdateFactory.newCameraPosition(
+                    CameraPosition.Builder().target(newlatlng)
+                        .zoom(16f).build()
+                )
             )
-        )
+        }
+
     }
 
 
