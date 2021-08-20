@@ -271,11 +271,13 @@ object MapsHelper {
             options.add(i)
         }
         options.clickable(true)
-            .width(15f)
-            .color(Color.BLUE)
-            .startCap(SquareCap())
-            .endCap(SquareCap())
-            .jointType(JointType.ROUND)
+            .width(17f)
+//            .color(0x7F00FF00)
+            .color(Color.parseColor("#D2008EFF"))
+            .startCap(RoundCap())
+            .endCap(RoundCap())
+            .geodesic(true)
+            .jointType(JointType.BEVEL)
 
         val polyline1 = mMap.addPolyline(options)
         polyline1.tag = "Api2"

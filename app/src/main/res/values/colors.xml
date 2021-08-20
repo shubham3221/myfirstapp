@@ -10,4 +10,5 @@
     <color name="myapp_color">#001733</color>
     <color name="music_background">#060E20</color>
     <color name="sheet_background">#19202E</color>
+    <color name="maptransparent">#D2008EFF</color>
 </resources>

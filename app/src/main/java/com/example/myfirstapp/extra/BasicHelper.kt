@@ -1,11 +1,15 @@
 package com.example.myfirstapp.extra
 
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.provider.Settings
 import android.util.Log
+import android.view.Window
+import android.widget.Button
+import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import com.example.myfirstapp.Myconstants
@@ -52,6 +56,10 @@ object BasicHelper {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity as Activity, pendingPermission)) {
             permissionDenied(true)
         } else {
+            showDialog(activity)
+            return
+
+
             val snackbar = Snackbar.make(rootView.requireView().findViewById(R.id.fragmentRoot),
                 "permission needs",
                 Snackbar.LENGTH_INDEFINITE)
@@ -65,5 +73,26 @@ object BasicHelper {
             snackbar.show()
             permissionDenied(false)
         }
+    }
+
+    private fun showDialog(context: Context) {
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.window?.attributes?.windowAnimations = R.style.PauseDialog
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.custom_layout)
+        val yes = dialog.findViewById(R.id.button6) as Button
+        val no = dialog.findViewById(R.id.button5) as Button
+        yes.setOnClickListener {
+            val intent = Intent()
+            intent.action = Settings.ACTION_APPLICATION_DETAILS_SETTINGS
+            val uri: Uri = Uri.fromParts("package", context.packageName, null)
+            intent.data = uri
+            context.startActivity(intent)
+            dialog.dismiss()
+        }
+        no.setOnClickListener { dialog.dismiss() }
+        dialog.show()
+
     }
 }

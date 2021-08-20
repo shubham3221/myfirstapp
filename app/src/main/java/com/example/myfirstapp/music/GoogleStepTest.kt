@@ -1,80 +1,84 @@
 package com.example.myfirstapp.music
 
-import android.R.attr
-import android.animation.AnimatorSet
-import android.animation.ValueAnimator
-import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.annotation.SuppressLint
+import android.graphics.Color
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.util.Log
 import android.view.View
-import android.view.animation.LinearInterpolator
-import androidx.annotation.RequiresApi
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LifecycleService
-import androidx.lifecycle.lifecycleScope
 import com.example.myfirstapp.Myconstants
 import com.example.myfirstapp.R
 import com.example.myfirstapp.extentions.toast
 import com.example.myfirstapp.music.stepMap.MapReady
 import com.example.myfirstapp.music.stepMap.MapsSetupFramgent
 import com.example.myfirstapp.music.stepMap.StepService
-import com.google.android.gms.location.*
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.*
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.lang.Exception
-import java.lang.Float.isNaN
 import java.util.*
-import java.util.concurrent.TimeUnit
-import android.R.attr.angle
 import android.os.*
 
-import com.google.android.gms.maps.model.LatLng
-import android.view.animation.AccelerateDecelerateInterpolator
-import android.view.animation.Interpolator
 import com.example.myfirstapp.Myconstants.Companion.TAG
+import com.example.myfirstapp.googleMaps.MyLocationProvider
+import com.example.myfirstapp.googleMaps.MarkerAnimator
+import com.example.myfirstapp.googleMaps.helper.MapsHelper
+import com.example.myfirstapp.googleMaps.helper.MapsHelperUber
+import com.google.android.gms.maps.model.*
+import com.google.maps.android.SphericalUtil
+import kotlinx.android.synthetic.main.google_step_fragment.*
 
 class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,LocationListener{
+    private var started: Boolean = false
     private var count: Int = 0
     private var mapTouched: Boolean = false
     private var mMap: GoogleMap? = null
 
-    private var marker: Marker? = null
-
-    private val points: Queue<LatLng> = LinkedList()
-
-    private var animatorSet = AnimatorSet()
-
+    private val points: ArrayList<LatLng> = ArrayList()
+    private val alLatLng: ArrayList<LatLng> = ArrayList()
     private var locationManager: LocationManager? = null
+    private var currentLatlng:LatLng? = null
+    private var previousLatLng:LatLng? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         MapsSetupFramgent(this).initMap()
     }
 
+    @SuppressLint("MissingPermission")
     override fun onMapReady(p0: GoogleMap) {
         mMap = p0
-        getLocation()
+//        getLocation()
+
+        MyLocationProvider(requireActivity(),this,null).initLocation()
 
         mMap!!.setOnMapClickListener {
             mapTouched = true
         }
+
+        startserice.text = "start"
+        startserice.setOnClickListener {
+            started = true
+        }
     }
     override fun onLocationChanged(location: Location) {
-        points.add(
-            LatLng(
-                location.latitude,
-                location.longitude
+        currentLatlng = LatLng(location.latitude, location.longitude)
+        if (previousLatLng!=null){
+            plotPolyline(previousLatLng?.latitude ,previousLatLng?.longitude ,currentLatlng?.latitude,currentLatlng?.longitude)
+            previousLatLng = null
+            points.clear()
+        }
+        if (started){
+            points.add(
+                LatLng(
+                    location.latitude,
+                    location.longitude
+                )
             )
-        )
-        SendNextPoints()
+            SendNextPoints()
+            MapsHelper.addPolygonFake(points,mMap!!)
+        }
     }
 
     @SuppressLint("MissingPermission")
@@ -93,84 +97,88 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
         }
     }
 
+    fun addCurvePolyline(start:LatLng,end: LatLng){
+        var cLat: Double = (start.latitude + end.latitude) / 2
+        var cLon: Double = (start.longitude + end.longitude) / 2
+
+        //add skew and arcHeight to move the midPoint
+
+        //add skew and arcHeight to move the midPoint
+        if (Math.abs(start.longitude - end.longitude) < 0.0001) {
+            cLon -= 0.0195
+        } else {
+            cLat += 0.0195
+        }
+
+        val tDelta = 1.0 / 50
+        run {
+            var t = 0.0
+            while (t <= 1.0) {
+                val oneMinusT = 1.0 - t
+                val t2 = Math.pow(t, 2.0)
+                val lon: Double =
+                    oneMinusT * oneMinusT * start.longitude + 2 * oneMinusT * t * cLon + t2 * end.longitude
+                val lat: Double =
+                    oneMinusT * oneMinusT * start.latitude + 2 * oneMinusT * t * cLat + t2 * end.latitude
+                alLatLng.add(LatLng(lat, lon))
+                t += tDelta
+            }
+        }
+
+        // draw polyline
+
+        // draw polyline
+        val line = PolylineOptions()
+        line.width(15f)
+        line.color(Color.RED)
+        line.addAll(alLatLng)
+        mMap!!.addPolyline(line)
+    }
+    private fun plotPolyline(
+        startLat: Double?,
+        startLon: Double?,
+        markerLat: Double?,
+        markerLon: Double?
+    ) {
+        if (startLat == null || startLon == null || markerLat == null || markerLon == null) {
+            return
+        }
+        var startPoint = LatLng(startLat, startLon)
+        var endPoint = LatLng(markerLat, markerLon)
+        val distance = SphericalUtil.computeDistanceBetween(startPoint, endPoint)
+        val midPoint = SphericalUtil.interpolate(startPoint, endPoint, 0.5)
+        val midToStartLocHeading = SphericalUtil.computeHeading(midPoint, startPoint)
+        val controlPointAngle = 360.0 - (180.0 - midToStartLocHeading)
+        val controlPoint = SphericalUtil.computeOffset(midPoint, distance / 2.0, controlPointAngle)
+        var t = 0.0
+        val polylineOptions = PolylineOptions()
+
+        while (t <= 1.00) {
+            val oneMinusT = 1.0 - t
+            val lon: Double =
+                oneMinusT * oneMinusT * startLon + 2 * oneMinusT * t * controlPoint.longitude + t * t * markerLon
+            val lat: Double =
+                oneMinusT * oneMinusT * startLat + 2 * oneMinusT * t * controlPoint.latitude + t * t * markerLat
+            polylineOptions.add(LatLng(lat, lon))
+            t += 0.05
+        }
+
+        polylineOptions.add(endPoint)
+
+        // Draw polyline
+//        polyline?.remove()
+        var pattern = listOf(Gap(10.0f), Dash(10.0f))
+        mMap?.addPolyline(
+            polylineOptions.width(10f).pattern(pattern)
+                .color(Color.RED)
+                .geodesic(false)
+        )
+    }
+
     private fun SendNextPoints() {
-        if (!animatorSet.isRunning && !points.isEmpty()) UpdateMarker(points.poll()!!) // taking the points f rom head of the queue.
-        Log.e(TAG, "SendNextPoints: ${points.size}", )
+        if (points.isNotEmpty()) MarkerAnimator.updateMarker(points.last(),mMap!!,mapTouched) // taking the points f rom head of the queue.
+        Log.e(TAG, "SendNextPoints: ${points.size}")
     }
-
-    private fun UpdateMarker(newlatlng: LatLng) {
-        if (marker != null) {
-            val bearingangle = Calculatebearingagle(newlatlng)
-            marker!!.setAnchor(0.5f, 0.5f)
-            animatorSet = AnimatorSet()
-            animatorSet.playTogether(
-                rotateMarker(
-                    ((if (isNaN(bearingangle)) -1F else bearingangle)),
-                    marker!!.rotation
-                ), moveVechile(newlatlng, marker!!.position)
-            )
-            animatorSet.start()
-        } else AddMarker(newlatlng)
-        count =0
-
-        if (!mapTouched){
-            mMap!!.animateCamera(
-                CameraUpdateFactory.newCameraPosition(
-                    CameraPosition.Builder().target(newlatlng)
-                        .zoom(16f).build()
-                )
-            )
-        }
-
-    }
-
-
-    private fun AddMarker(initialpos: LatLng) {
-        val markerOptions = MarkerOptions().position(initialpos).flat(true)
-            .icon(BitmapDescriptorFactory.fromResource(R.drawable.scooter))
-        marker = mMap!!.addMarker(markerOptions)
-    }
-
-    private fun Calculatebearingagle(newlatlng: LatLng): Float {
-        val destinationLoc = Location("service Provider")
-        val userLoc = Location("service Provider")
-        userLoc.latitude = marker!!.position.latitude
-        userLoc.longitude = marker!!.position.longitude
-        destinationLoc.latitude = newlatlng.latitude
-        destinationLoc.longitude = newlatlng.longitude
-        return userLoc.bearingTo(destinationLoc)
-    }
-
-    @Synchronized
-    fun rotateMarker(toRotation: Float, startRotation: Float): ValueAnimator? {
-        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator.interpolator = LinearInterpolator()
-        valueAnimator.duration = 1555
-        valueAnimator.addUpdateListener { valueAnimator ->
-            val t = valueAnimator.animatedValue.toString().toFloat()
-            val rot = t * toRotation + (1 - t) * startRotation
-            marker!!.rotation = if (-rot > 180) rot / 2 else rot
-        }
-        return valueAnimator
-    }
-
-
-    @Synchronized
-    fun moveVechile(finalPosition: LatLng, startPosition: LatLng): ValueAnimator? {
-        val valueAnimator = ValueAnimator.ofFloat(0f, 1f)
-        valueAnimator.interpolator = LinearInterpolator()
-        valueAnimator.duration = 1000
-        valueAnimator.addUpdateListener { valueAnimator ->
-            val t = valueAnimator.animatedValue.toString().toFloat()
-            val currentPosition = LatLng(
-                startPosition.latitude * (1 - t) + finalPosition.latitude * t,
-                startPosition.longitude * (1 - t) + finalPosition.longitude * t
-            )
-            marker!!.position = currentPosition
-        }
-        return valueAnimator
-    }
-
 
     override fun onProviderEnabled(provider: String) {
         Log.e(Myconstants.TAG, "onProviderEnabled: ")
@@ -178,7 +186,18 @@ class GoogleStepTest:Fragment(R.layout.google_step_fragment) , MapReady ,Locatio
 
     override fun onProviderDisabled(provider: String) {
         Log.e(Myconstants.TAG, "onProviderDisabled: ")
+        previousLatLng = points.last()
+
+
+
     }
 
     override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+    override fun onDestroy() {
+        super.onDestroy()
+        points.clear()
+        mMap?.clear()
+//        locationManager!!.removeUpdates(this)
+    }
 }
