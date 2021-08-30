@@ -6,13 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".paging.PagingActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:id="@+id/mRecycler"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_margin="20dp"
+    <com.chauthai.overscroll.RecyclerViewBouncy
+        android:id="@+id/mRecycler2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+
+        app:friction="150"
+        app:gapLimit="220"
+
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxAdapterSizeToEstimate="20"
+        app:speedFactor="15"
+        app:tension="1000"
+        android:visibility="gone"
+        app:viewCountEstimateSize="5" />
+
+    <com.example.myfirstapp.slider.SlidingItemMenuRecyclerView
+        android:id="@+id/mRecycler"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        app:itemDraggable="true"
+        app:itemScrollDuration="600"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

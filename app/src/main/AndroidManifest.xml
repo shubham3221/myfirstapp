@@ -25,15 +25,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
-        <activity android:name=".camera.CamActivity">
+        <activity
+            android:name=".newproject.simple.BottomSimpleActivity"
+            android:exported="true" >
 
         </activity>
-        <activity android:name=".camera.CameraActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity
+            android:name=".newproject.BottomActivity"
+            android:exported="true"
+            android:label="@string/title_activity_bottom" >
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+
         </activity>
 
         <service
@@ -43,15 +45,11 @@
             android:foregroundServiceType="location" />
 
         <activity android:name=".workmanager.WorkActivity" />
-        <activity android:name=".camera.demo.PicturePreviewActivity" />
-        <activity android:name=".camera.demo.VideoPreviewActivity" />
-        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity"/>
+        <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" />
         <activity
             android:name=".music.MusicActivity"
             android:screenOrientation="sensor"
-            android:theme="@style/music">
-
-        </activity>
+            android:theme="@style/music" />
         <activity android:name=".animation.AnimationActivity" />
         <activity android:name=".testing.TestingActivity" />
 
@@ -61,7 +59,13 @@
             android:exported="true" />
 
         <activity android:name=".services.ServiceActivity" />
-        <activity android:name=".paging.PagingActivity" />
+        <activity android:name=".paging.PagingActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <service
             android:name=".extra.GpsTracker"
@@ -153,9 +157,7 @@
         <activity
             android:name=".mvvm.all_activities.ImageActivity"
             android:screenOrientation="sensor" />
-        <activity android:name=".googleMaps.MapsActivity" >
-
-        </activity>
+        <activity android:name=".googleMaps.MapsActivity" />
     </application>
 
 </manifest>

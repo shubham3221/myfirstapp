@@ -10,3 +10,13 @@ class PagingAdapter(var arrayList: ArrayList<PagingDataClass>) : AbstractPagingA
         }
     }
 }
+
+class PagingAdapterString(var arrayList: ArrayList<String>) : AbstractPagingAdapter<PagingRecycleLayoutBinding>(
+    arrayList,PagingRecycleLayoutBinding::inflate){
+
+    override fun bindView(holder: AbstractViewHolder2<PagingRecycleLayoutBinding>, position: Int) {
+        if (arrayList.isNotEmpty()){
+            holder.binding.textView2.text = arrayList[position]
+        }
+    }
+}

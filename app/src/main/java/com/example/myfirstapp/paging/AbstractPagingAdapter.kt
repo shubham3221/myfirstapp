@@ -29,6 +29,7 @@ abstract class AbstractPagingAdapter<VB : ViewBinding >(
         return list.size
     }
     fun <T> updateAdapter(list: ArrayList<T>){
+        this.list.clear()
         this.list = list
         notifyDataSetChanged()
     }
