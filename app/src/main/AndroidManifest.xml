@@ -26,17 +26,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Myfirstapp">
         <activity
-            android:name=".newproject.simple.BottomSimpleActivity"
+            android:name=".bottom.ui.BottomActivity"
             android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity
-            android:name=".newproject.BottomActivity"
-            android:exported="true"
-            android:label="@string/title_activity_bottom" >
 
-
-        </activity>
 
         <service
             android:name=".music.stepMap.StepService"
@@ -59,12 +57,8 @@
             android:exported="true" />
 
         <activity android:name=".services.ServiceActivity" />
-        <activity android:name=".paging.PagingActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+        <activity android:name=".paging.PagingActivity">
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
 
         <service

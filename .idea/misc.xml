@@ -5,12 +5,15 @@
       <map>
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/drawable-xxxhdpi/swipe_bg.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/drawable/bottom_selector.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.19583333333333333" />
+        <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.19583333333333333" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/activity_bottom.xml" value="0.1796875" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/activity_bottom_simple.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/activity_paging.xml" value="0.1796875" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/fragment_dashboard.xml" value="0.1796875" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/fragment_home.xml" value="0.16666666666666666" />
-        <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/fragment_notifications.xml" value="0.1796875" />
+        <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/fragment_notifications.xml" value="0.22" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/paging_recycle_layout.xml" value="0.16666666666666666" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/layout/steps_layout.xml" value="0.1796875" />
         <entry key="..\:/Users/sharma/Downloads/Compressed/myfirstapp/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1796875" />
